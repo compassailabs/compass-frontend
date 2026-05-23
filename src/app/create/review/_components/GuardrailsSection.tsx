@@ -5,11 +5,6 @@ import type { Policy } from "@/lib/api";
 import { SectionHead } from "./atoms";
 import { sectionBase, sectionNeutral } from "./styles";
 
-/**
- * Bullet list of guardrails — pulled straight from the policy that
- * will get committed. The numbers shown here are what the engine
- * actually enforces; nothing made up.
- */
 export function GuardrailsSection({ policy }: { policy: Policy | null }) {
   return (
     <section

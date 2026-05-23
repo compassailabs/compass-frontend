@@ -17,19 +17,6 @@ import { PolicyControlsCard } from "./_components/PolicyControlsCard";
 import { StrategyStatus } from "./_components/StrategyStatus";
 import { aggregateBy } from "./_components/aggregateBy";
 
-/**
- * Dashboard orchestrator. Reads user state, branches on
- * connected / session-ready, then composes:
- *   - StrategyStatus     (header right)
- *   - EarningsCard       (hero: value + net deposited / earned / APR)
- *   - SmartAccountCard   (address + per-chain balances + CTAs)
- *   - HoldingsCard       (when funded + allocated)
- *   - DistributionCard × (by chain, by protocol)
- *   - PolicyControlsCard (when a policy exists)
- *   - AuditFeed          (recent activity, links to /activity)
- *
- * All section components live in `_components/` next door.
- */
 export default function DashboardPage() {
   const { isConnected, address } = useAccount();
   const position = useUserStateStore((s) => s.position);
@@ -79,10 +66,6 @@ export default function DashboardPage() {
     }
   }
 
-  // Drop dust rows (< $0.01) so the Holdings list, venue count, and
-  // distribution charts hide the empty Idle (Diamond) buckets the engine
-  // emits when one chain is unused. formatUsdc rounds to 2 decimals, so
-  // anything below 10_000 raw 6-decimal units already renders as "0.00".
   const holdings = (position?.holdings ?? []).filter(
     (h) => BigInt(h.amount) >= 10_000n,
   );
@@ -110,11 +93,8 @@ export default function DashboardPage() {
           <StrategyStatus policy={policy} />
         </header>
 
-        {/* Hero: live total value + net deposited / earned / APR. */}
         <EarningsCard />
 
-        {/* Smart account address + per-chain balances + Deposit /
-            Unstake / Withdraw CTAs — kept secondary to the value hero. */}
         <SmartAccountCard />
 
         {empty ? (
@@ -142,8 +122,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Policy controls — relevant pre-funding too (user may want to
-            review/pause before funding). Hide entirely if no policy. */}
         {policy && (
           <PolicyControlsCard
             policy={policy}

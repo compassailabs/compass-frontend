@@ -2,10 +2,6 @@ import clsx from "clsx";
 
 import type { FlightLine } from "./state";
 
-/**
- * Black-glass log strip below the module grid. Auto-scrolls in flight
- * lines as the cinematic plays; capped at 6 rows to keep height fixed.
- */
 export function FlightRecorder({ lines }: { lines: FlightLine[] }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-line-2 bg-black/[0.32] backdrop-blur-xl">

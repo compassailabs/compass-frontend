@@ -15,11 +15,6 @@ interface UIState {
   sendToWalletModalOpen: boolean;
   openSendToWalletModal: () => void;
   closeSendToWalletModal: () => void;
-  /**
-   * Monotonic nonce that the Chat page subscribes to. Incrementing it
-   * triggers a "new chat" — header logo and the Chat tab pill bump it
-   * when the user is already on /chat so a second click doesn't no-op.
-   */
   newChatNonce: number;
   requestNewChat: () => void;
 }

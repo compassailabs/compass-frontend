@@ -31,13 +31,6 @@ interface UserStateStore {
 let pollIntervalId: number | undefined;
 let pollAbortController: AbortController | undefined;
 
-/**
- * Singleton store + polling loop for the per-wallet view of Policy +
- * Position + Audit + Balance + Session. Mounted once via
- * `<UserStatePoller>` in root layout; `AppHeader` (status dot +
- * SmartAccountPill) and Dashboard (full panels) read from it, so
- * there is one fetch path regardless of which route is active.
- */
 export const useUserStateStore = create<UserStateStore>((set, get) => ({
   address: undefined,
   policy: null,
@@ -53,9 +46,6 @@ export const useUserStateStore = create<UserStateStore>((set, get) => ({
     pollAbortController = new AbortController();
     const signal = pollAbortController.signal;
 
-    // Each fetch settles independently so one failing endpoint never
-    // wipes the rest of the store. Without this, a 5xx on /audit
-    // would block /balance from ever updating the UI.
     const swallow = <T>(p: Promise<T>, fallback: T): Promise<T> =>
       p.catch((err) => {
         if ((err as Error).name !== "AbortError") {

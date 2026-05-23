@@ -1,9 +1,4 @@
-/**
- * Reasoning trace inline above the final reply. Always-visible (no
- * collapse) — Boss explicitly asked for no dropdowns in chat. Tagged
- * with a small header so the user can tell reasoning from the answer
- * at a glance.
- */
+
 export function ThinkingPanel({
   text,
   streaming,

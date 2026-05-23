@@ -2,11 +2,6 @@ import type { ReactNode } from "react";
 
 import type { FlightLine, ModuleKey } from "./state";
 
-/**
- * Pre-computed inputs that the cinematic playback substitutes into
- * timeline lines + module footers — captured once at mount time so the
- * cinematic doesn't visibly mutate as on-chain state arrives.
- */
 export type TimelineInputs = {
   walletShort: string;
   smartAccountShort: string;
@@ -25,12 +20,6 @@ export interface TimelineStep {
   goLive?: true;
 }
 
-/**
- * Cinematic launch script keyed off `t=0` (mount). Each step fires
- * via `setTimeout(step.at)`. Numbers are the real user wallet /
- * smart-account / deposit / allocation / APR — the cinematic just
- * reads them in nicely.
- */
 export function buildTimeline(i: TimelineInputs): TimelineStep[] {
   return [
     { at: 320, line: { ts: "00:00.318", glyph: "ok", msg: <>Signature confirmed · wallet <b>{i.walletShort}</b></>, ms: "318 ms", live: true } },

@@ -3,11 +3,6 @@ import clsx from "clsx";
 import type { ModuleDef } from "./timeline";
 import type { State } from "./state";
 
-/**
- * 4-tile grid of module cards. Each tile fades in (`opacity-100`) and
- * tints mint once its corresponding cinematic step activates it via
- * `state.done[m.key]`.
- */
 export function ModuleGrid({
   modules,
   state,

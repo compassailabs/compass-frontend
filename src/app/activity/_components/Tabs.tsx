@@ -4,11 +4,6 @@ import clsx from "clsx";
 
 import type { Tab } from "./types";
 
-/**
- * All / Thoughts / Moves filter strip. Each tab shows its current
- * matching event count next to the label so the user knows how many
- * items they'd see before clicking.
- */
 export function Tabs({
   current,
   onChange,

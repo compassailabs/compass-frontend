@@ -1,13 +1,5 @@
 import Link from "next/link";
 
-/**
- * Smart account exists but `holdings` is empty (after dust filter).
- * Variants:
- *   - no funds + no policy → onboarding nudge
- *   - no funds, policy ready → "fund and the engine will allocate"
- *   - funded, no policy → "set a strategy in chat"
- *   - funded + policy live → "engine just hasn't ticked yet"
- */
 export function EmptyHoldingsCard({
   hasPolicy,
   hasFunds,

@@ -10,10 +10,6 @@ import { wagmiConfig } from "@/lib/wagmi";
 
 import "@rainbow-me/rainbowkit/styles.css";
 
-/**
- * Calls `sdk.actions.ready()` once if we're inside a Farcaster Mini App,
- * so the host can hide its splash screen. No-op in regular browsers.
- */
 function MiniAppReadyGate() {
   useEffect(() => {
     let cancelled = false;

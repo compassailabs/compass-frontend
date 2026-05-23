@@ -24,17 +24,6 @@ import { IdentitySection } from "./_components/IdentitySection";
 import { PositionSection } from "./_components/PositionSection";
 import { SignSection } from "./_components/SignSection";
 
-/**
- * Wizard step 4 — review and sign. Every value here is sourced from
- * something the user controls or the engine reports:
- *   - Owner = connected wallet (useAccount)
- *   - Compass account = CREATE2 smart-account address (balance store)
- *   - Position = wizard's chosen amount, in real USDC
- *   - Allocation = the venues actually selected, with live APR
- *   - Guardrails = numbers from the policy that's about to be committed
- *
- * Page only orchestrates derived state; visuals live in `_components/`.
- */
 export default function ReviewPage() {
   const { address } = useAccount();
   const strategy = useCompassStore((s) => s.strategy);
@@ -57,9 +46,6 @@ export default function ReviewPage() {
     return () => ac.abort();
   }, []);
 
-  // Build the *real* policy that the launching step will POST, so the
-  // guardrails the user sees here are the exact numbers that get
-  // committed. compilePolicyFromWizard is the source of truth.
   const policy: Policy | null = useMemo(() => {
     if (!address) return null;
     return compilePolicyFromWizard({ user: address, strategy });

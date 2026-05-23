@@ -14,13 +14,6 @@ export type StrategyDef = {
   glyph: ReactNode;
 };
 
-/**
- * Differences across the three profiles map to real knobs in
- * `compilePolicyFromWizard` (per_protocol_cap_pct / apr_delta_bps /
- * max_actions_per_day / max_gas_usd_per_action). Keep these bullets in
- * sync with `PROFILE_DEFAULTS` in `src/lib/api.ts` so the wizard
- * doesn't describe one policy and commit another.
- */
 export const STRATEGIES: StrategyDef[] = [
   {
     id: "conservative",

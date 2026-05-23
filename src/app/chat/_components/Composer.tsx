@@ -3,11 +3,6 @@
 import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
-/**
- * Auto-growing textarea + Send button. Enter sends; Shift+Enter adds a
- * newline. Caps at 200px tall before the textarea starts scrolling
- * inside its own box.
- */
 export function Composer({
   value,
   onChange,

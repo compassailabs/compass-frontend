@@ -21,20 +21,6 @@ import { useUserStateStore } from "@/store/userState";
 
 const FAUCET_URL = "https://faucet.circle.com/";
 
-/**
- * Funding flow for the user's Compass smart account.
- *
- * Deposit chain is fixed to **Arc Testnet** — that's where the agent
- * picks up funds and routes them on-demand (the Arbitrum side is
- * receive-only via Circle Gateway, so a manual Arbitrum deposit would
- * just sit there). Two ways in:
- *   1. **Faucet** — external Circle USDC faucet for first-time users.
- *   2. **Transfer from EOA** — `USDC.transfer(smartAccount, amount)` on
- *      Arc, with auto network switch if the wallet is elsewhere.
- *
- * Header shows the smart-account address (CREATE2, identical on Arc and
- * Arbitrum Sepolia) with copy + a chain picker for Explorer ↗.
- */
 export function FundModal() {
   const open = useUIStore((s) => s.fundModalOpen);
   const close = useUIStore((s) => s.closeFundModal);
@@ -49,18 +35,12 @@ export function FundModal() {
   const [amount, setAmount] = useState("1");
   const [submitting, setSubmitting] = useState(false);
   const [pendingHash, setPendingHash] = useState<`0x${string}` | null>(null);
-  // Raw 6-dec amount of the in-flight transfer, captured at submit
-  // time so the receipt handler can POST `/funded` with the correct
-  // value even if the input box changes while we wait for confirmation.
   const [pendingAmount6dec, setPendingAmount6dec] = useState<string | null>(
     null,
   );
   const [explorerOpen, setExplorerOpen] = useState(false);
   const explorerWrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Wait for the in-flight transfer to land on Arc, then re-poll
-  // /balance a few times to defeat RPC index lag (Arc occasionally
-  // returns stale balances for 1-3s after the block confirms).
   const { data: receipt, isLoading: confirming } =
     useWaitForTransactionReceipt({
       hash: pendingHash ?? undefined,
@@ -71,20 +51,13 @@ export function FundModal() {
     if (!receipt || !pendingHash) return;
     if (receipt.status === "success") {
       toast.success("Transfer confirmed");
-      // Record the deposit in the DB so /earnings can compute
-      // net_deposited without log-scanning. Idempotent on tx_hash so a
-      // duplicate POST (e.g. tab refresh) is safe.
       if (eoa && pendingAmount6dec) {
         void recordFunded(eoa, {
           chain: "arc",
           kind: "deposit",
           amount_6dec: pendingAmount6dec,
           tx_hash: pendingHash,
-        }).catch(() => {
-          // Non-fatal — the on-chain transfer succeeded; worst case
-          // the dashboard's net_deposited stays one event behind until
-          // we retry.
-        });
+        }).catch(() => {});
       }
       void refresh();
       const t1 = window.setTimeout(() => void refresh(), 2000);
@@ -110,7 +83,6 @@ export function FundModal() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, submitting, confirming, close]);
 
-  // Close the explorer dropdown on any outside click.
   useEffect(() => {
     if (!explorerOpen) return;
     function onClick(e: MouseEvent) {
@@ -238,7 +210,6 @@ export function FundModal() {
           </button>
         </header>
 
-        {/* Smart account address card */}
         <div className="mb-5 rounded-[14px] border border-line-2 bg-black/30 p-4">
           <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4 mb-1.5">
             Your Compass account
@@ -326,7 +297,6 @@ export function FundModal() {
           )}
         </div>
 
-        {/* Faucet path */}
         <div className="mb-4 rounded-[14px] border border-line-2 bg-black/20 p-4">
           <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4 mb-1">
             Option 1 · Get test USDC from a faucet
@@ -348,7 +318,6 @@ export function FundModal() {
           </a>
         </div>
 
-        {/* Transfer path */}
         <div className="mb-5 rounded-[14px] border border-line-2 bg-black/20 p-4">
           <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4 mb-1">
             Option 2 · Transfer USDC from your wallet

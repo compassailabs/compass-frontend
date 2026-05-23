@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================================
- * Compass frontend — design tokens + body baseline + Grid bg.
- * Everything else lives as Tailwind utility classes in JSX.
- * Only patterns Tailwind can't express ergonomically end up in
- * the @layer components block below (data-attribute color maps,
- * mask-composite gradient borders, ::after pseudo-element marks).
- * Keyframes/animations are declared in tailwind.config.ts.
- * ============================================================ */
-
 :root {
   --arc-deep:    #0A1428;
   --arc-mid:     #1B2E4F;
@@ -35,15 +26,9 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; min-height: 100vh; }
 
-  /* Utility: hide scrollbar but keep scroll. Used by the chat thread
-     so the conversation surface doesn't get a chunky default scrollbar
-     during streaming. Scroll behaviour itself is unchanged. */
   .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* Cover the overscroll / area-outside-body too, so neither macOS
-     rubber-banding nor the browser's default checkered "no-bg" pattern
-     ever shows through at the top or bottom of the viewport. */
   html { background: var(--arc-deep); }
 
   body {
@@ -58,7 +43,6 @@
     position: relative;
   }
 
-  /* Grid background — fixed 56px grid with radial mask. */
   body::before {
     content: "";
     position: fixed;
@@ -77,11 +61,6 @@
 }
 
 @layer components {
-  /* ---------- Chain color map (data-c attribute) ----------
-   * Used by amount-page deploy tiles, markets-page filter pills, and
-   * market-card chain badges. Apply with: <span class="chain-color"
-   * data-c="arc">A</span>. Inline because Tailwind data-* arbitrary
-   * variants would repeat 7 chains × 2 properties = noisy. */
   .chain-color[data-c="arc"]       { background: linear-gradient(135deg, var(--silver-1), var(--silver-3)); color: var(--arc-deep); }
   .chain-color[data-c="base"]      { background: #0052FF; color: #fff; }
   .chain-color[data-c="ethereum"]  { background: linear-gradient(135deg, #627EEA, #3C3CDD); color: #fff; }
@@ -90,10 +69,6 @@
   .chain-color[data-c="optimism"]  { background: #FF0420; color: #fff; }
   .chain-color[data-c="avalanche"] { background: #E84142; color: #fff; }
 
-  /* ---------- Gradient border via mask-composite ----------
-   * Apply to a relative container with the same border-radius as the
-   * ::before; renders a 1px gradient ring. Used by AllocationPreview /
-   * preview-pane / sign-section. */
   .gradient-border {
     position: relative;
   }
@@ -110,9 +85,6 @@
     pointer-events: none;
   }
 
-  /* ---------- Hover sheen ----------
-   * Radial ellipse from top-right that fades in on hover. Used by
-   * cmp-card / market-card / step-card. */
   .hover-sheen {
     position: relative;
     overflow: hidden;
@@ -129,7 +101,6 @@
   }
   .hover-sheen:hover::after { opacity: 1; }
 
-  /* ---------- Step rail left bars (current / done) ---------- */
   .step-bar-current::before,
   .step-bar-done::before {
     content: "";
@@ -143,9 +114,6 @@
   .step-bar-current::before { background: linear-gradient(180deg, var(--silver-1), var(--silver-3)); }
   .step-bar-done::before    { background: var(--mint); }
 
-  /* ---------- Check marks (CSS-drawn corner check) ----------
-   * Used on selected cmp-radio (strategy) and selected mc-check (markets).
-   * Two-size variants because the source pixel offsets differ. */
   .check-mark-sm::after,
   .check-mark-md::after {
     content: "";
@@ -157,7 +125,6 @@
   .check-mark-sm::after { left: 7px; top: 4px; width: 5px; height: 10px; }
   .check-mark-md::after { left: 6px; top: 3px; width: 6px; height: 11px; }
 
-  /* ---------- "Home" corner badge on chain-tile ---------- */
   .home-badge::after {
     content: "Home";
     position: absolute;
@@ -174,9 +141,6 @@
     text-transform: uppercase;
   }
 
-  /* ---------- Button reset for clickable cards ----------
-   * Tailwind utilities don't override UA button text-align/font/width,
-   * so apply this when the card root is a <button>. */
   .card-button {
     width: 100%;
     text-align: left;
@@ -188,10 +152,6 @@
   }
 }
 
-/* ---------- Keyframes ----------
- * Tailwind aliases declared in tailwind.config.ts (`animate-mint-pulse`,
- * `animate-blink`, `animate-spin-slow`, `animate-amber-pulse`,
- * `animate-flight-line`, `animate-spin-fast`). */
 @keyframes mintPulse {
   0%   { box-shadow: 0 0 0 0 rgba(127, 223, 183, 0.5); }
   70%  { box-shadow: 0 0 0 8px rgba(127, 223, 183, 0); }

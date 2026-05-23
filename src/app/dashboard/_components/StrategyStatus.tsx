@@ -5,11 +5,6 @@ import clsx from "clsx";
 
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Strategy status pill + "modify in chat" link, designed to sit in the
- * Dashboard header's right side. Replaces the old SummaryCard whose
- * giant "Total allocated" number duplicated the EarningsCard hero.
- */
 export function StrategyStatus({
   policy,
 }: {

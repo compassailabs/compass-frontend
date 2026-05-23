@@ -5,16 +5,6 @@ import clsx from "clsx";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Slim amber banner that surfaces only when the user's session is set
- * up but their smart account holds zero USDC on both chains. Used by
- * Chat (above the composer) and Create (above the wizard step) to
- * stop users from typing intents the engine can't act on.
- *
- * Renders nothing until we know enough to be confident (`session.ready
- * === true && balance !== null && balance.has_funds === false`), so it
- * never flashes during initial load.
- */
 export function FundReminder({ variant = "compact" }: { variant?: "compact" | "full" }) {
   const session = useUserStateStore((s) => s.session);
   const balance = useUserStateStore((s) => s.balance);

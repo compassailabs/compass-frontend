@@ -3,12 +3,6 @@ import { FundReminder } from "@/components/account/FundReminder";
 import { Rail } from "@/components/chrome/Rail";
 import { PathBootstrap } from "@/components/chrome/PathBootstrap";
 
-/**
- * Wizard inner shell. The global `AppHeader` + modals live in root
- * layout, so this only handles wizard-specific chrome: the left step
- * Rail + scrolling main content area. Height fills whatever the root
- * `<main>` slot gives us (`flex-1` of the viewport minus header).
- */
 export default function CreateLayout({ children }: { children: ReactNode }) {
   return (
     <>

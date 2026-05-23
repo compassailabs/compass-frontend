@@ -5,10 +5,6 @@ import { StarMark } from "@/components/visuals/StarMark";
 import { Field } from "./atoms";
 import { sectionBase, sectionNeutral } from "./styles";
 
-/**
- * Top identity row — Compass + strategy name, smart account address,
- * connected EOA, network summary.
- */
 export function IdentitySection({
   strategyLabel,
   smartAccount,

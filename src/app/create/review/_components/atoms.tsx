@@ -1,10 +1,6 @@
 import type { ReactNode } from "react";
 import clsx from "clsx";
 
-/**
- * Numbered + uppercase label header that each section uses (`01
- * Identity`, `02 Position`, etc).
- */
 export function SectionHead({
   n,
   label,
@@ -38,10 +34,6 @@ export function SectionHead({
   );
 }
 
-/**
- * Vertical (Owner / Network) field on the right side of the identity
- * row. Collapses to a horizontal row at narrow widths.
- */
 export function Field({ k, v }: { k: string; v: string }) {
   return (
     <div
@@ -60,7 +52,6 @@ export function Field({ k, v }: { k: string; v: string }) {
   );
 }
 
-/** Horizontal key/value row used in the Position section. */
 export function Line({
   k,
   v,

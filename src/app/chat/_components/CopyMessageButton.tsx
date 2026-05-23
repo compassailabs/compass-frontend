@@ -4,12 +4,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import clsx from "clsx";
 
-/**
- * Copy-to-clipboard button anchored to the bottom-right of an assistant
- * bubble. Hover-revealed so it doesn't clutter the reading surface;
- * shows a brief "Copied" confirmation after success. Matches the
- * ChatGPT / Claude pattern for per-message copy.
- */
 export function CopyMessageButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   async function onCopy() {

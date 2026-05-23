@@ -3,12 +3,6 @@ import clsx from "clsx";
 import type { ChainId, ProtocolId } from "@/lib/api";
 import { chainLabel, protocolLabel } from "@/lib/format";
 
-/**
- * "By chain" / "By protocol" stacked bar + legend. Generic over the
- * grouping `kind` so we can render either dimension with the same
- * component — color choices switch based on whether each key is a
- * chain or a protocol.
- */
 export function DistributionCard({
   label,
   parts,

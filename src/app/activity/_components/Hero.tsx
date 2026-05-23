@@ -1,6 +1,4 @@
-/**
- * Activity page hero — title + tagline + Thoughts / Moves big numbers.
- */
+
 export function Hero({
   stats,
 }: {

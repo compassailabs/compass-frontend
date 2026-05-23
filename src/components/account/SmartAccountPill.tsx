@@ -5,28 +5,11 @@ import clsx from "clsx";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Header pill showing the user's Compass smart-account at a glance:
- *   `Compass · 0x9b09…3c09 · 1.0 USDC`
- *
- * Click → opens FundModal so user can copy the address, hit a faucet,
- * or transfer USDC from their EOA without leaving the current page.
- *
- * Hidden until `session.ready` so it doesn't compete visually with the
- * "Setup session" amber pill during the bootstrap step.
- */
 export function SmartAccountPill() {
   const openFundModal = useUIStore((s) => s.openFundModal);
   const balance = useUserStateStore((s) => s.balance);
   const session = useUserStateStore((s) => s.session);
 
-  // `/balance` alone is enough to render the pill — it returns the
-  // CREATE2 smart-account address + both chain balances. `/session` is
-  // a separate endpoint that does ~8 RPC calls and can lag behind on
-  // cold start; gating the pill on `session.ready` made the pill
-  // disappear whenever session was still loading even though balance
-  // had landed. Now session is only used as an address fallback if
-  // /balance hasn't responded yet.
   const addr = balance?.smart_account ?? session?.arc.address;
   if (!addr) return null;
   const short = `${addr.slice(0, 6)}…${addr.slice(-4)}`;

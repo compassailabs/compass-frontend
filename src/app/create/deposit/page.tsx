@@ -34,17 +34,6 @@ import { AmountInputPane } from "./_components/AmountInputPane";
 import { DepositCta } from "./_components/DepositCta";
 import { MIN_DEPOSIT } from "./_components/constants";
 
-/**
- * Wizard step 3 — **Deposit**. Orchestrator only. Two-pane layout
- * (`AmountInputPane` left, `AllocationPreviewPane` right) + a custom
- * `DepositCta` in the StepHead slot that fires the real on-chain
- * USDC.transfer flow.
- *
- * All numbers shown to the user come from real sources: EOA balance
- * from wagmi, smart account balance from `/balance`, APRs from
- * `/markets`. Continue → signs the transfer → records the funding
- * event server-side → navigates to Review.
- */
 export default function DepositPage() {
   const router = useRouter();
   const amount = useCompassStore((s) => s.amount);
@@ -63,14 +52,10 @@ export default function DepositPage() {
   const [markets, setMarkets] = useState<MarketEntry[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [pendingHash, setPendingHash] = useState<`0x${string}` | null>(null);
-  // Raw 6-dec amount captured at submit so the receipt handler can
-  // POST `/funded` with the right number.
   const [pendingAmount6dec, setPendingAmount6dec] = useState<string | null>(
     null,
   );
 
-  // ── EOA USDC balance on Arc (source of funds). /balance reports
-  //    the smart-account balance, not the EOA, so we read direct. ──
   const { data: eoaUsdcRaw, refetch: refetchEoaBalance } = useReadContract({
     chainId: arcTestnet.id,
     address: ARC_USDC_ADDRESS as `0x${string}`,
@@ -90,7 +75,6 @@ export default function DepositPage() {
       chainId: arcTestnet.id,
     });
 
-  // ── Live markets for APR / allocation preview ──
   useEffect(() => {
     const ac = new AbortController();
     (async () => {
@@ -104,8 +88,6 @@ export default function DepositPage() {
     return () => ac.abort();
   }, []);
 
-  // Default-fill markets so the preset path (which skips Markets) still
-  // gets an allocation preview + a valid policy.
   useEffect(() => {
     if (selectedKeys.length === 0 && markets.length > 0) {
       const defaults = markets
@@ -115,24 +97,14 @@ export default function DepositPage() {
     }
   }, [markets, selectedKeys.length, setSelectedKeys]);
 
-  // Refresh smart-account balance on entry so the "already deposited"
-  // line reflects what just landed from a previous Fund or session
-  // setup.
   useEffect(() => {
     void refresh();
   }, [refresh]);
 
-  // ── Once the deposit transfer confirms, refresh both balances and
-  //   navigate to Review. The 2s/5s reruns defeat RPC index lag (Arc
-  //   sometimes shows stale balances 1-3s after the block confirms);
-  //   fire-and-forget so navigating away from Deposit doesn't cancel
-  //   them — both refresh fns just update the global zustand store. ──
   useEffect(() => {
     if (!receipt || !pendingHash) return;
     if (receipt.status === "success") {
       toast.success("Deposit confirmed");
-      // Record the deposit in the DB so /earnings picks it up. Fire
-      // and forget — failure is non-blocking; idempotent on tx_hash.
       if (eoa && pendingAmount6dec) {
         void recordFunded(eoa, {
           chain: "arc",
@@ -174,9 +146,7 @@ export default function DepositPage() {
     [markets, selectedKeys],
   );
   const yieldVenues = selectedMarkets.filter((m) => m.is_yield_venue);
-  // Blended APR = simple average of yield venues; matches the engine's
-  // diversification heuristic (it splits evenly across non-capped
-  // candidates). For one yield venue this is just that venue's rate.
+
   const blendedApr =
     yieldVenues.length === 0
       ? 0
@@ -251,8 +221,6 @@ export default function DepositPage() {
     }
   }
 
-  // Allocation = 100% to AAVE v3 if it's in the selection. If only
-  // Wallet venues are selected, split evenly so the bar isn't empty.
   const allocations = useMemo(() => {
     if (selectedMarkets.length === 0) return [];
     if (yieldVenues.length > 0) {

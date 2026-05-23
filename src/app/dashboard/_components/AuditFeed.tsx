@@ -6,12 +6,6 @@ import { collapseFeed, eventTypeLabel, summarizeAudit, type FeedRow } from "@/li
 import { txExplorerUrl } from "@/lib/explorers";
 import { timeAgo } from "@/lib/format";
 
-/**
- * Dashboard "Recent activity" peek — shows the most recent N collapsed
- * feed rows with a link to the full /activity timeline. The full
- * audit feed (with day grouping + tab filters) lives on the dedicated
- * Activity page; this is just a glance.
- */
 const FEED_LIMIT = 5;
 
 export function AuditFeed({ events }: { events: AuditEvent[] }) {

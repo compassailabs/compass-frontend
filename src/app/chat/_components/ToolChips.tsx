@@ -5,18 +5,6 @@ import clsx from "clsx";
 
 import type { ToolTrace } from "@/lib/api";
 
-/**
- * Always-visible row of skill chips so the user can verify what the
- * agent actually invoked. Defeats fabricated confirmations: if there's
- * no `commit_policy` chip, no commit happened. Collapses past 3 chips
- * with a `+N more` toggle to keep the bubble header tidy on long runs.
- *
- * Chip states:
- *   * **pending** — pulsing dot, dim outline (no fill yet)
- *   * **done (read tool)** — soft silver fill + check mark
- *   * **done (write tool)** — mint fill + check mark, more saturated
- *     so writes pop visually next to reads
- */
 export function ToolChips({ trace }: { trace: ToolTrace[] }) {
   const WRITE = new Set(["commit_policy", "pause_policy", "resume_policy"]);
   const COLLAPSED_LIMIT = 3;

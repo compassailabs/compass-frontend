@@ -1,12 +1,5 @@
 import type { ChainId, ProtocolId } from "@/lib/api";
 
-/**
- * Cross-page formatting helpers. Kept tiny and pure so the same string a
- * user sees in Holdings, Audit feed, Dashboard tiles, etc. is always
- * produced by the same function — no per-page label drift.
- */
-
-/** raw 6-decimal USDC bigint → "1,234.56" (rounded to 2 decimals). */
 export function formatUsdc(raw: bigint): string {
   const whole = raw / 1_000_000n;
   const frac = raw % 1_000_000n;
@@ -18,11 +11,6 @@ export function chainLabel(c: ChainId): string {
   return c === "arc" ? "Arc" : "Arbitrum Sepolia";
 }
 
-// "Available" instead of "Wallet" — we now use "Wallet" elsewhere to
-// mean the user's EOA (Withdraw target), so overloading the same word
-// for the Compass-side idle balance creates ambiguity. "Available"
-// reads as "ready to deploy or pull out", which is exactly what idle
-// USDC inside the smart account is.
 export function protocolLabel(p: ProtocolId): string {
   return p === "aave_v3" ? "AAVE v3" : "Available";
 }

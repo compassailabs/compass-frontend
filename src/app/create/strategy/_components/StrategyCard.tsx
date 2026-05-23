@@ -19,14 +19,6 @@ const cardSelected =
   "shadow-[0_24px_60px_-20px_rgba(226,232,240,0.18),inset_0_1px_0_rgba(255,255,255,0.08)] " +
   "bg-[radial-gradient(ellipse_100%_100%_at_0%_0%,rgba(255,255,255,0.08),transparent_70%),rgba(255,255,255,0.04)]";
 
-/**
- * One profile card on the Strategy step. Same shape for all three
- * (Conservative / Balanced / Growth); the per-profile content comes
- * from `STRATEGIES` so the visual stays consistent.
- *
- * `liveAprStr` is shared across cards — same number, different framing
- * (mint highlight on the recommended one).
- */
 export function StrategyCard({
   s,
   isSelected,

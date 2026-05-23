@@ -1,9 +1,5 @@
 import type { PositionHolding } from "@/lib/api";
 
-/**
- * Group holdings by a derived key (chain or protocol) summing amounts.
- * Used to feed `DistributionCard` with `byChain` / `byProtocol`.
- */
 export function aggregateBy<K extends string>(
   holdings: PositionHolding[],
   keyFn: (h: PositionHolding) => K,

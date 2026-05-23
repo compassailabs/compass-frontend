@@ -19,12 +19,6 @@ const cardSelected =
   "shadow-[0_16px_40px_-20px_rgba(226,232,240,0.18),inset_0_1px_0_rgba(255,255,255,0.06)] " +
   "bg-gradient-to-b from-white/[0.06] to-white/[0.015]";
 
-/**
- * One venue card on the Markets step. Shows the chain icon, protocol
- * + chain label, the venue's display label, lending kind, APY (mint
- * if ≥4%, silver otherwise), and a Live/Soon status pill. Toggles
- * selection on click via the checkbox in the top-right corner.
- */
 export function MarketCard({
   m,
   isSelected,

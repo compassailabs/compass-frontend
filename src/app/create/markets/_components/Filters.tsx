@@ -14,10 +14,6 @@ const filterPillBase =
   "inline-flex items-center gap-[6px] px-3 py-[6px] rounded-pill " +
   "border text-[12px] tracking-[-0.005em] cursor-pointer transition-all duration-[150ms]";
 
-/**
- * Chain + protocol pill rows on the left, search box on the right.
- * Pressing `/` from anywhere outside an input focuses the search box.
- */
 export function Filters({
   chainFilter,
   setChainFilter,

@@ -17,11 +17,6 @@ import { Timeline } from "./_components/Timeline";
 import { groupByDay } from "./_components/groupByDay";
 import type { Tab } from "./_components/types";
 
-/**
- * Dedicated activity log inspired by Giza Thoughts. Page-level glue
- * only — derive filtered rows + day groups + stats, then hand off to
- * `_components/Hero`, `Tabs`, `Timeline`, `EmptyState`.
- */
 export default function ActivityPage() {
   const { isConnected } = useAccount();
   const audit = useUserStateStore((s) => s.audit);

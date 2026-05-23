@@ -1,10 +1,5 @@
 import Link from "next/link";
 
-/**
- * Full-page empty / blocked state — used when the wallet isn't
- * connected or the user hasn't finished the one-time session setup.
- * Centered card with optional CTA link.
- */
 export function EmptyShell({
   title,
   body,

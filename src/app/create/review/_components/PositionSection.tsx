@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { Line, SectionHead } from "./atoms";
 import { sectionBase, sectionNeutral } from "./styles";
 
-/** Position panel — deposit amount + custody/source/withdraw facts. */
 export function PositionSection({
   amount,
   address,

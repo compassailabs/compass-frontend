@@ -2,11 +2,6 @@ import type { FeedRow } from "@/lib/audit";
 
 export type DayGroup = { date: string; label: string; rows: FeedRow[] };
 
-/**
- * Walk the (already newest-first) collapsed feed, breaking on calendar
- * day boundaries. Labels "Today" / "Yesterday" / "Wed, May 21" based
- * on the user's local timezone so the rail reads naturally.
- */
 export function groupByDay(rows: FeedRow[]): DayGroup[] {
   const out: DayGroup[] = [];
   const today = startOfDay(new Date());

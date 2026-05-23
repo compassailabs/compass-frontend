@@ -3,10 +3,6 @@ import clsx from "clsx";
 import { SectionHead } from "./atoms";
 import { sectionBase, sectionMint } from "./styles";
 
-/**
- * Bottom mint-tinted "Signature" panel — three reassuring bullets
- * about what signing actually does + a pulsing ready/wait status.
- */
 export function SignSection({
   address,
 }: {

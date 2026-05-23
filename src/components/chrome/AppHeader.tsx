@@ -10,15 +10,6 @@ import { StarMark } from "@/components/visuals/StarMark";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Single app-wide top bar. Hosted in root layout so both `/chat` and
- * `/create/*` render under the same chrome — same logo, same toggle,
- * same wallet + Compass account controls.
- *
- * Right cluster, in order: SmartAccountPill (post-setup) or Setup-session
- * amber pill (pre-setup) → wallet ConnectButton. Strategy / policy panel
- * lives in the Dashboard route now, not the header.
- */
 export function AppHeader() {
   const openSessionModal = useUIStore((s) => s.openSessionModal);
   const requestNewChat = useUIStore((s) => s.requestNewChat);
@@ -33,8 +24,6 @@ export function AppHeader() {
         <Link
           href="/"
           onClick={(e) => {
-            // If we're already on /chat, treat the logo click as a
-            // "new chat" intent instead of a no-op route push.
             if (isOnChat) {
               e.preventDefault();
               requestNewChat();

@@ -2,11 +2,6 @@ import clsx from "clsx";
 
 import { MIN_MARKETS } from "./types";
 
-/**
- * Strip above the cards: selected count pill (mint vs amber based on
- * whether the user hit the minimum) + blended APR pill + a small
- * "Live rates" label on the right.
- */
 export function SelectionBar({
   selectedCount,
   blendedApr,

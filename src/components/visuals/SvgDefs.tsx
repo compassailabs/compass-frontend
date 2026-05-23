@@ -1,7 +1,4 @@
-/**
- * Inline SVG defs mounted once at the root so any <use href="#star"/>
- * in the tree picks up the silver-gradient star mark.
- */
+
 export function SvgDefs() {
   return (
     <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">

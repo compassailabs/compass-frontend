@@ -1,9 +1,5 @@
 import type { Submission } from "./state";
 
-/**
- * Amber error / mint success strip shown above the launch hero while
- * the policy commit POST runs in the background.
- */
 export function SubmissionBanner({ submission }: { submission: Submission }) {
   if (submission.state === "error") {
     return (

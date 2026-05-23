@@ -6,9 +6,6 @@ import { timeAgo } from "@/lib/format";
 
 import type { DayGroup } from "./groupByDay";
 
-/**
- * Left date rail + right activity rows, grouped by calendar day.
- */
 export function Timeline({ groups }: { groups: DayGroup[] }) {
   return (
     <div className="flex flex-col gap-2">

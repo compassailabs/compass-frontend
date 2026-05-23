@@ -25,18 +25,6 @@ import {
   type TimelineInputs,
 } from "./_components/timeline";
 
-/**
- * Launching orchestrator. Runs two parallel things:
- *   1. **Real policy commit** — `compilePolicyFromWizard` → `putPolicy`.
- *      The result drives the SubmissionBanner.
- *   2. **Cinematic timeline** — pre-scripted `setTimeout`s that fill
- *      in the flight recorder + module grid + hero status as the user
- *      watches. Mostly cosmetic; reflects the wizard's *real* numbers
- *      (wallet, smart account, deposit, allocation, APR).
- *
- * Sub-components live in `_components/`. State / reducer / timeline
- * script live alongside as `state.ts` + `timeline.tsx`.
- */
 export default function LaunchingPage() {
   const [state, dispatch] = useReducer(reducer, INITIAL);
   const { address, isConnected } = useAccount();
@@ -60,7 +48,6 @@ export default function LaunchingPage() {
     return () => ac.abort();
   }, []);
 
-  // Real backend submission, runs in parallel with the cosmetic timeline.
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -93,8 +80,6 @@ export default function LaunchingPage() {
     };
   }, [address, isConnected, strategy]);
 
-  // Build the timeline inputs from real wizard + on-chain state. Memo
-  // so the timer effect doesn't re-arm every render.
   const inputs: TimelineInputs = useMemo(() => {
     const walletShort = address
       ? `${address.slice(0, 6)}…${address.slice(-4)}`
@@ -151,9 +136,6 @@ export default function LaunchingPage() {
       }, step.at),
     );
     return () => timers.forEach(window.clearTimeout);
-    // Timeline only plays once on mount; even if `inputs` change later
-    // (e.g. balance refresh), restarting the cinematic would be jarring.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

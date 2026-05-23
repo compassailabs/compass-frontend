@@ -1,12 +1,9 @@
-/** Quick-pick preset percentages of the EOA's USDC balance. */
 export const PRESETS = [
   { label: "25%", pct: 25 },
   { label: "50%", pct: 50 },
   { label: "MAX", pct: 100 },
 ] as const;
 
-/** Min deposit is 0 — testnet supports any amount; below break-even
- *  the engine just NoOps. Don't lie about a floor that doesn't exist. */
 export const MIN_DEPOSIT = 0;
 
 export const VENUE_DOT_BY_KEY: Record<string, string> = {

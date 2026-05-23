@@ -1,10 +1,5 @@
 import Link from "next/link";
 
-/**
- * "Power user · alt path" footer card under the three profile cards.
- * Clicking it jumps to the Markets step with `?path=custom`, swapping
- * the wizard sequence to include venue selection.
- */
 export function CustomPathCard({ liveVenueCount }: { liveVenueCount: number }) {
   return (
     <Link

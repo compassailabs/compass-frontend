@@ -6,15 +6,6 @@ import clsx from "clsx";
 
 import { arcTestnet } from "@/lib/wagmi";
 
-/**
- * Renders an amber banner under the header when the connected wallet
- * is on a chain other than Arc Testnet. Provides a one-click "switch"
- * button that triggers `wallet_switchEthereumChain` (or
- * `wallet_addEthereumChain` if the user's wallet doesn't know about
- * Arc yet — viem's chain definition supplies the params).
- *
- * Silent when the wallet is disconnected or already on Arc.
- */
 export function NetworkGuard() {
   const { isConnected, chain } = useAccount();
   const { switchChain, isPending } = useSwitchChain();

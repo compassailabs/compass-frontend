@@ -18,15 +18,6 @@ import {
   type ProtocolFilter,
 } from "./_components/types";
 
-/**
- * Wizard step 2 — venue picker. The engine only routes to the three
- * venues compass-rs `Snapshot.venues` knows about; we fetch the list
- * (with live APR) from `/markets` so what the user sees here is
- * exactly what the evaluator considers on each tick.
- *
- * Page logic only — `Filters`, `SelectionBar`, and `MarketCard` live
- * in `_components/`.
- */
 export default function MarketsPage() {
   const selected = useCompassStore((s) => s.markets);
   const setMarkets = useCompassStore((s) => s.setMarkets);
@@ -52,9 +43,6 @@ export default function MarketsPage() {
     return () => ac.abort();
   }, []);
 
-  // Default-select all yield venues the first time the wizard sees the
-  // markets list. Re-selecting on every visit would clobber the user's
-  // pruning, so only fill if `selected` is genuinely empty.
   useEffect(() => {
     if (selected.length === 0 && markets.length > 0) {
       const defaults = markets

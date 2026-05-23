@@ -2,10 +2,6 @@ import Link from "next/link";
 
 import type { Tab } from "./types";
 
-/**
- * Tab-specific empty state. Different copy depending on whether the
- * user filtered to thoughts vs moves vs all.
- */
 export function EmptyState({ tab }: { tab: Tab }) {
   const lines: Record<Tab, { title: string; body: string }> = {
     all: {

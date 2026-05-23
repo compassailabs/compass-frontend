@@ -1,12 +1,4 @@
-/**
- * Client for the compass-rs HTTP backend.
- *
- * Always same-origin `/api/*` — Next.js rewrites in `next.config.mjs`
- * proxy `/api/*` to `BACKEND_URL` server-side. The real backend host
- * never reaches the browser bundle, and we get zero-CORS, single-domain
- * deployment for free. Set `BACKEND_URL` (no `NEXT_PUBLIC_` prefix) in
- * `.env.local` or the host's environment.
- */
+
 export const API_BASE = "/api";
 
 export type ChatRole = "user" | "assistant";
@@ -29,8 +21,6 @@ export interface ChatResult {
   reply: string;
   trace: ToolTrace[];
 }
-
-// ── Streaming chat ────────────────────────────────────────────────
 
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 
@@ -95,15 +85,6 @@ export type StreamChatEvent =
   | MessageStopEvent
   | ErrorEvent;
 
-/**
- * Open a streaming chat. Backend SSE emits typed events; this helper
- * normalises them and pumps them into `onEvent`. Resolves when the
- * stream closes cleanly (after `message_stop`) and rejects on network
- * failure or non-OK status. Caller controls abort via `signal`.
- *
- * Server is the source of truth for chat history — clients only send
- * the new message; recent turns are pulled from DB inside the handler.
- */
 export async function streamChat(
   user: string,
   message: string,
@@ -115,8 +96,6 @@ export async function streamChat(
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ message }),
     signal,
-    // fetch-event-source retries by default on disconnect — disable so
-    // an explicit abort or server-side message_stop ends the stream.
     openWhenHidden: true,
     async onopen(resp) {
       if (resp.ok) return;
@@ -134,7 +113,6 @@ export async function streamChat(
       onEvent(parsed);
     },
     onerror(err) {
-      // Throwing aborts the stream + bubbles to the caller.
       throw err;
     },
   });
@@ -161,11 +139,6 @@ export async function getChatHistory(
   return resp.json();
 }
 
-/**
- * Wipes the user's chat history on the server. Powers the New chat
- * button — the page also resets local state so the UI updates instantly
- * without waiting for the next history fetch.
- */
 export async function clearChatHistory(user: string): Promise<void> {
   const resp = await fetch(`${API_BASE}/chat/${user}/history`, {
     method: "DELETE",
@@ -174,8 +147,6 @@ export async function clearChatHistory(user: string): Promise<void> {
     throw new Error(`clearChatHistory ${resp.status}`);
   }
 }
-
-// ── Policy types (mirror compass-rs src/automation/policy/schema.rs) ──
 
 export type ChainId = "arc" | "arbitrum_sepolia";
 export type ProtocolId = "idle" | "aave_v3";
@@ -222,11 +193,6 @@ export interface Policy {
   notifications?: null;
 }
 
-/**
- * Per-risk-profile defaults — keep in sync with chat_agent.rs system
- * prompt so the wizard path and the chat path produce structurally
- * comparable Policies.
- */
 const PROFILE_DEFAULTS: Record<
   RiskLabel,
   {
@@ -237,11 +203,6 @@ const PROFILE_DEFAULTS: Record<
     max_gas_usd_per_action: number;
   }
 > = {
-  // Demo / testnet defaults: BOTH `min_net_profit_usd` and `apr_delta_bps`
-  // are dialled way down from production values (150/100/50 bps + $2/$1/$0
-  // min profit) so the engine actually fires on testnet AAVE's ~29 bps
-  // APR. Without this, every preset would Noop with
-  // `apr_delta_below_threshold` and nothing would ever execute.
   conservative: {
     per_protocol_cap_pct: 50,
     apr_delta_bps: 20,
@@ -265,13 +226,6 @@ const PROFILE_DEFAULTS: Record<
   },
 };
 
-/**
- * Build a backend-compatible Policy from the wizard's risk selection.
- * Whitelist is fixed to the three backend-supported venues for now
- * (Idle on both chains + AAVE on Arbitrum Sepolia). When more protocol
- * adapters land in compass-rs, extend this to honor the wizard's
- * per-market selection.
- */
 export function compilePolicyFromWizard(opts: {
   user: string;
   strategy: RiskLabel;
@@ -367,8 +321,6 @@ export async function resumePolicy(
   return resp.json();
 }
 
-// ── Audit + Position read shapes (mirror compass-rs) ──
-
 export interface AuditEvent {
   id: number;
   ts: string;
@@ -395,7 +347,7 @@ export interface AuditEvent {
 
 export interface PositionHolding {
   venue: VenueRef;
-  amount: string; // U256 raw 6-decimal USDC (decimal string)
+  amount: string;
 }
 
 export interface PositionLastAction {
@@ -433,11 +385,8 @@ export async function getPosition(
   return resp.json();
 }
 
-// ── Balance (smart-account USDC on both chains) ──
-
 export interface BalanceResponse {
   user: string;
-  /// Same address on both chains (CREATE2).
   smart_account: string;
   arc_usdc_6dec: string;
   arbitrum_sepolia_usdc_6dec: string;
@@ -455,8 +404,6 @@ export async function getBalance(
   return resp.json();
 }
 
-// ── Funded (record user-initiated USDC custody events) ──
-
 export type FundingKind = "deposit" | "withdraw_to_eoa";
 
 export interface FundedRequest {
@@ -466,12 +413,6 @@ export interface FundedRequest {
   tx_hash: string;
 }
 
-/**
- * Tell the backend a Fund / Deposit transfer landed on-chain. Idempotent
- * on (user, chain, kind, tx_hash) — re-posting the same tx is safe and
- * the second call returns the original id without duplicating the row.
- * Powers `/earnings` net-deposited without log-scanning.
- */
 export async function recordFunded(
   user: string,
   body: FundedRequest,
@@ -487,18 +428,11 @@ export async function recordFunded(
   return resp.json();
 }
 
-// ── Earnings ──
-
 export interface EarningsResponse {
   user: string;
   smart_account: string;
-  /// Raw 6-decimal USDC the user has funded into Compass (cumulative
-  /// from the funding_event table; survives restart on Postgres).
   net_deposited_6dec: string;
-  /// Current total Compass-held value (idle USDC + AAVE position).
   current_value_6dec: string;
-  /// Signed string. Positive means yield; "-" prefix means a loss
-  /// (bridge / gas exceeded yield — show it honestly).
   gross_earned_6dec: string;
   performance_fee_pct: number;
   fee_6dec: string;
@@ -514,8 +448,6 @@ export async function getEarnings(
   return resp.json();
 }
 
-// ── Withdraw ──
-
 export interface WithdrawStep {
   label: string;
   chain: "arc" | "arbitrum_sepolia";
@@ -526,23 +458,11 @@ export interface WithdrawResponse {
   user: string;
   arc_smart_account: string;
   arbitrum_smart_account: string;
-  /// aToken balance held by the Arbitrum Diamond before the withdraw,
-  /// raw 6-decimal USDC.
   aave_balance_6dec: string;
-  /// Amount that crossed the bridge to Arc, raw 6-decimal USDC.
-  /// Equals the Arbitrum Diamond's USDC balance right after the AAVE
-  /// withdraw (so it picks up any pre-existing idle balance too).
   bridged_6dec: string;
   steps: WithdrawStep[];
 }
 
-/**
- * Full reverse unwind: AAVE on Arbitrum → Gateway bridge → Compass
- * smart account on Arc. Funds never leave the user's smart-account
- * envelope; they just end up on the chain where the deposit
- * originally landed. The owner key on the server signs all txs so the
- * user only clicks once.
- */
 export async function withdrawAll(
   user: string,
   signal?: AbortSignal,
@@ -558,30 +478,14 @@ export async function withdrawAll(
   return resp.json();
 }
 
-// ── Send to wallet (final custody exit) ──
-
 export interface SendToWalletResponse {
   user: string;
   smart_account: string;
-  /// Arc Diamond USDC balance before the transfer (raw 6-dec).
   balance_before_6dec: string;
-  /// Amount that actually moved to the EOA (raw 6-dec).
   sent_6dec: string;
-  /// `null` when there was nothing to send.
   tx_hash: string | null;
 }
 
-/**
- * Pulls every spare USDC out of the Compass smart account on Arc and
- * sends it to the user's EOA. The actual custody exit (after this the
- * money is in the user's wallet, outside Compass).
- *
- * Pairs with `withdrawAll`:
- *   - `withdrawAll`: AAVE on Arbitrum → smart account on Arc
- *   - `sendToWallet`: smart account on Arc → user EOA
- * Run both in sequence for a full exit; either independently for
- * partial actions.
- */
 export async function sendToWallet(
   user: string,
   signal?: AbortSignal,
@@ -597,18 +501,12 @@ export async function sendToWallet(
   return resp.json();
 }
 
-// ── Markets ──
-
 export interface MarketEntry {
   chain: ChainId;
   protocol: ProtocolId;
-  /// Pre-composed display name from the backend ("AAVE v3 on Arbitrum
-  /// Sepolia"). Render verbatim so wizard pages don't redo the mapping.
   label: string;
-  /// Decimal APR, e.g. 0.0421 for 4.21%. 0 for non-yield venues.
   apr: number;
   is_yield_venue: boolean;
-  /// "live" — engine actually routes here; "soon" — listed for UI only.
   status: "live" | "soon";
 }
 
@@ -624,12 +522,9 @@ export async function getMarkets(
   return resp.json();
 }
 
-/** Stable string id for a venue: `chain:protocol`. Used in wizard state. */
 export function venueKey(m: { chain: ChainId; protocol: ProtocolId }): string {
   return `${m.chain}:${m.protocol}`;
 }
-
-// ── Session (smart-account + session-key) ──
 
 export interface DiamondStatus {
   chain: "arc" | "arbitrum_sepolia";

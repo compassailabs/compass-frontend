@@ -7,21 +7,7 @@ import { useAccount } from "wagmi";
 import { getEarnings, type EarningsResponse, type MarketEntry, getMarkets } from "@/lib/api";
 import { formatUsdc } from "@/lib/format";
 
-/**
- * Giza-style hero card: big "Current value" headline + Net deposited /
- * Net earned / APR stat row. Pulls /earnings (on-chain Transfer log
- * scan) and /markets (live AAVE rate) on mount + every time the
- * userState store's session updates.
- *
- * Tooltips break out the math users care about — Net earned splits
- * into `Earned − Fee = Net`, APR splits into `APR · Performance fee`.
- * Performance fee is locked at 0% on testnet; the schema is in place
- * so flipping it on in production is a one-line Policy change.
- */
 export function EarningsCard() {
-  // Source of truth for "who is the user" — wagmi's connected EOA.
-  // Don't read from session.user: it's stale after a wallet switch
-  // and undefined until session setup completes.
   const { address: user } = useAccount();
 
   const [earnings, setEarnings] = useState<EarningsResponse | null>(null);
@@ -37,20 +23,16 @@ export function EarningsCard() {
           getMarkets(ac.signal),
         ]);
         setEarnings(e);
-        // Use the best live yield venue's APR — matches what the
-        // engine routes to on rebalance.
+
         const best = m.markets
           .filter((mk: MarketEntry) => mk.is_yield_venue && mk.status === "live")
           .reduce((max: number, mk: MarketEntry) => Math.max(max, mk.apr), 0);
         if (best > 0) setAprPct(best * 100);
-      } catch {
-        // Render with placeholders; not blocking the page.
-      }
+      } catch {}
     })();
     return () => ac.abort();
   }, [user]);
 
-  // Loading / no-data: render a quiet shell instead of jumping in.
   if (!user || !earnings) {
     return (
       <section className="rounded-[20px] border border-line-2 bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-6">
@@ -73,7 +55,6 @@ export function EarningsCard() {
 
   return (
     <section className="rounded-[20px] border border-line-2 bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-6 flex flex-col gap-5">
-      {/* Hero — current value */}
       <div>
         <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4 mb-2">
           Current value
@@ -83,7 +64,6 @@ export function EarningsCard() {
         </div>
       </div>
 
-      {/* Stat row */}
       <div className="grid grid-cols-3 gap-6 pt-5 border-t border-line-1">
         <Stat
           label="Net deposited"
@@ -250,7 +230,6 @@ function safeParse(raw: string | undefined): bigint {
   }
 }
 
-/** "-12345" → { sign: -1, value: 12345n }. */
 function parseSigned(raw: string | undefined): { sign: 1 | -1; value: bigint } {
   if (!raw) return { sign: 1, value: 0n };
   const trimmed = raw.startsWith("-") ? raw.slice(1) : raw;

@@ -9,16 +9,6 @@ import { setupSession } from "@/lib/api";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * One-time on-chain bootstrap dialog. Triggered from the AppHeader
- * "Setup session" pill when `session.ready === false`. Calls the
- * backend `/session/:user/setup` which:
- *   1. deploys the user's Diamond on Arc + Arbitrum Sepolia (CREATE2 with
- *      `salt = 0` — same address on both chains)
- *   2. registers the agent's session key with a 24-hour expiry,
- *      scoped to the AAVE supply/withdraw and Gateway deposit/withdraw
- *      selectors only
- */
 export function SessionSetupModal() {
   const open = useUIStore((s) => s.sessionModalOpen);
   const close = useUIStore((s) => s.closeSessionModal);

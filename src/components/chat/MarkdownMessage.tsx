@@ -8,18 +8,6 @@ import clsx from "clsx";
 
 import "highlight.js/styles/atom-one-dark.css";
 
-/**
- * Markdown renderer for chat bubbles. Stripped-down adaptation of the
- * gotchipus terminal markdown component:
- *   - GitHub-flavored markdown (tables, strikethrough, task lists)
- *   - rehype-highlight for fenced code blocks
- *   - PreCode wraps `<pre>` with a copy button
- *   - SmartLink opens external URLs in a new tab with `rel="noopener"`
- *
- * Skipped on purpose: math (KaTeX), mermaid diagrams, streaming-aware
- * incomplete-fence patching, soft-break plugin. Compass chat doesn't
- * stream and doesn't render math.
- */
 export const MarkdownMessage = memo(function MarkdownMessage({
   children,
 }: {
@@ -30,16 +18,11 @@ export const MarkdownMessage = memo(function MarkdownMessage({
       <ReactMarkdown
         remarkPlugins={[RemarkGfm]}
         rehypePlugins={[
-          // `detect: false` is the streaming-friendly setting (matches
-          // gotchi-rs): only highlight when the fence has an explicit
-          // ```lang tag. Auto-detection runs a classifier on every
-          // chunk and is the single biggest cost during live updates.
           [RehypeHighlight, { detect: false, ignoreMissing: true }],
         ]}
         components={{
           pre: PreCode,
           a: SmartLink,
-          // Tighten Tailwind reset interactions on common elements.
           p: ({ children, ...rest }) => (
             <p {...rest} className="my-2 first:mt-0 last:mb-0">
               {children}
@@ -128,11 +111,6 @@ export const MarkdownMessage = memo(function MarkdownMessage({
   );
 });
 
-/**
- * Wraps `<pre>` blocks with a "Copy" button that copies the inner
- * `<code>` text. Same pattern as gotchipus — minus the mermaid escape
- * hatch (we don't render diagrams in chat).
- */
 function PreCode({ children }: { children?: React.ReactNode }) {
   const ref = useRef<HTMLPreElement>(null);
   const [copied, setCopied] = useState(false);
@@ -172,10 +150,6 @@ function PreCode({ children }: { children?: React.ReactNode }) {
   );
 }
 
-/**
- * Links open in a new tab when external; same-tab for our own routes.
- * `noopener noreferrer` keeps the new tab from getting `window.opener`.
- */
 function SmartLink({
   href,
   children,

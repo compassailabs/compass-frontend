@@ -10,22 +10,6 @@ import { formatUsdc } from "@/lib/format";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Withdraw flow — pull the user's AAVE position on Arbitrum back to
- * their Compass smart account on Arc. **USDC in, USDC out**: funds
- * never leave the user's custody envelope; they end up at the same
- * address on Arc where the original deposit landed.
- *
- * Two-stage on-chain dance (handled server-side, one user click):
- *   1. `arb_diamond.withdrawAave(max)` — pull USDC out of AAVE
- *   2. `arb_diamond.depositToGateway(amount)` — escrow on Gateway
- *   3. Circle BurnIntent + attestation
- *   4. `GatewayMinter.gatewayMint(...)` on Arc — Arc Diamond credited
- *
- * The user's wallet is never touched in the withdraw flow; pulling
- * USDC out to the EOA is a separate "transfer to wallet" action we
- * can build on top once the basic unwind is solid.
- */
 export function WithdrawModal() {
   const open = useUIStore((s) => s.withdrawModalOpen);
   const close = useUIStore((s) => s.closeWithdrawModal);
@@ -51,8 +35,6 @@ export function WithdrawModal() {
 
   if (!open) return null;
 
-  // Best-known preview from cached state; backend re-reads chain at
-  // withdraw time so the result panel is the source of truth.
   const aaveHolding = position?.holdings.find(
     (h) =>
       h.venue.chain === "arbitrum_sepolia" && h.venue.protocol === "aave_v3",
@@ -81,8 +63,7 @@ export function WithdrawModal() {
       } else {
         toast.success(`Bridged ${formatUsdc(moved)} USDC back to Arc`);
       }
-      // Re-poll balance / position a couple of times to defeat RPC lag
-      // on both chains.
+
       void refresh();
       window.setTimeout(() => void refresh(), 2500);
       window.setTimeout(() => void refresh(), 7000);
@@ -139,7 +120,6 @@ export function WithdrawModal() {
           </button>
         </header>
 
-        {/* Source: what gets pulled */}
         <div className="mb-3 rounded-[14px] border border-line-2 bg-black/30 p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4">
@@ -167,7 +147,6 @@ export function WithdrawModal() {
           />
         </div>
 
-        {/* Route visual */}
         <div className="mb-3 flex items-center justify-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4">
           <span>Circle Gateway</span>
           <svg
@@ -178,7 +157,6 @@ export function WithdrawModal() {
           </svg>
         </div>
 
-        {/* Destination: where it lands */}
         <div className="mb-4 rounded-[14px] border border-mint/[0.25] bg-mint/[0.04] p-4 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-mint">
@@ -211,7 +189,6 @@ export function WithdrawModal() {
           </div>
         </div>
 
-        {/* Action */}
         {result ? (
           <ResultPanel result={result} />
         ) : (

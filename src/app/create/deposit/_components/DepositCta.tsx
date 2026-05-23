@@ -2,12 +2,6 @@
 
 import clsx from "clsx";
 
-/**
- * Big silver CTA in the StepHead slot. Replaces the wizard's standard
- * `ContinueButton` because Deposit needs to fire a real on-chain
- * transfer (wagmi `writeContractAsync`) instead of just navigating —
- * the page hooks the click directly into the deposit flow.
- */
 export function DepositCta({
   label,
   disabled,

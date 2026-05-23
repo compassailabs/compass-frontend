@@ -1,8 +1,4 @@
-/**
- * Shared visual tokens for review page sections — keeps every panel
- * styled consistently without copy-pasting Tailwind chains across
- * component files.
- */
+
 export const sectionBase =
   "relative flex flex-col gap-[14px] pl-[22px] pr-[22px] pt-5 pb-5 " +
   "rounded-[18px] border backdrop-blur-xl";

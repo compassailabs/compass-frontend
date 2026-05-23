@@ -8,12 +8,6 @@ import { addressExplorerUrl } from "@/lib/explorers";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Dashboard hero card showing the user's Compass smart-account at full
- * fidelity: address, per-chain USDC balance, copy + explorer links,
- * Fund CTA. When the account has zero USDC the card switches to an
- * amber "Fund first" call-to-action so the user can't miss it.
- */
 export function SmartAccountCard() {
   const balance = useUserStateStore((s) => s.balance);
   const session = useUserStateStore((s) => s.session);
@@ -24,7 +18,6 @@ export function SmartAccountCard() {
   const [explorerOpen, setExplorerOpen] = useState(false);
   const explorerWrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Close the explorer dropdown on any outside click.
   useEffect(() => {
     if (!explorerOpen) return;
     function onClick(e: MouseEvent) {
@@ -37,9 +30,6 @@ export function SmartAccountCard() {
     return () => window.removeEventListener("mousedown", onClick);
   }, [explorerOpen]);
 
-  // Prefer balance.smart_account (canonical from /balance) but fall back
-  // to session.arc.address so the card paints immediately after setup
-  // even before the first /balance poll completes.
   const maybeAddr = balance?.smart_account ?? session?.arc.address;
   if (!maybeAddr) return null;
   const addr: string = maybeAddr;

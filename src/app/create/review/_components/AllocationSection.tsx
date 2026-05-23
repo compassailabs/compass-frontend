@@ -7,11 +7,6 @@ import { sectionBase, sectionNeutral, VENUE_DOT, VENUE_GRAD } from "./styles";
 
 export type AllocationRow = { venue: MarketEntry; pct: number };
 
-/**
- * Allocation panel — headline blended APR, stacked bar across venues,
- * per-venue legend with APR + share. Cut-off footer with engine cadence
- * and an "N earning · M uninvested" counter pill.
- */
 export function AllocationSection({
   strategyLabel,
   blendedApr,

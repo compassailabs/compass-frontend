@@ -2,12 +2,6 @@
 
 import clsx from "clsx";
 
-/**
- * "+ New chat" pill shown at the top-right of the conversation layout.
- * Clears server-side history (via `clearChatHistory`) and resets the
- * UI to the hero state. `busy=true` disables it while the clear is
- * in flight.
- */
 export function NewChatButton({
   onClick,
   busy,

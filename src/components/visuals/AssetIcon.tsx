@@ -2,11 +2,6 @@ import clsx from "clsx";
 
 import type { ChainId } from "@/lib/api";
 
-/**
- * Uniswap-style stacked asset icon: token logo with a small chain badge
- * overlaid bottom-right (ring-arc-deep gives the "punched out" look so
- * the badge reads cleanly against any underlying background).
- */
 export function AssetIcon({
   chain,
   size = "md",
@@ -37,10 +32,6 @@ const SIZE = {
   lg: { outer: "w-14 h-14", token: "w-14 h-14", badge: "w-5 h-5 text-[10px]" },
 };
 
-// ── USDC token logo ───────────────────────────────────────────────
-// Uses Circle's official mark from /icons/usdc.svg so the token chip
-// matches what the user sees in wallets, explorers, and Circle's app.
-
 function UsdcLogo({ className }: { className?: string }) {
   return (
     <img
@@ -51,8 +42,6 @@ function UsdcLogo({ className }: { className?: string }) {
     />
   );
 }
-
-// ── Chain badge ────────────────────────────────────────────────────
 
 function ChainBadge({
   chain,

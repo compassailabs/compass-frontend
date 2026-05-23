@@ -6,12 +6,6 @@ import { formatMoney, VENUE_DOT_BY_KEY, VENUE_GRAD_BY_KEY } from "./constants";
 
 export type AllocationRow = { venue: MarketEntry; pct: number };
 
-/**
- * Right pane of the Deposit step. Lives at preview-only: shows what
- * the engine *will* do with the deposit (blended APR, per-venue
- * split, expected yearly earn). Re-computes from `amount` so it
- * stays in sync with what the user types in the left pane.
- */
 export function AllocationPreviewPane({
   strategyLabel,
   blendedApr,

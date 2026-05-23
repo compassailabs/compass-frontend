@@ -20,9 +20,6 @@ const STRATEGY_LABEL: Record<string, string> = {
   growth: "Growth",
 };
 
-// Only the chains the engine actually routes between today. Stating
-// "+6 chains" was demo-skin theatre — keep this in sync with backend
-// ChainId enum.
 const NETWORK_LABEL = "Arc + Arbitrum Sepolia";
 
 export function ProgressCard() {

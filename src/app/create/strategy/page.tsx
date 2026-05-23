@@ -13,13 +13,6 @@ import { CustomPathCard } from "./_components/CustomPathCard";
 import { StrategyCard } from "./_components/StrategyCard";
 import { STRATEGIES } from "./_components/strategies";
 
-/**
- * Wizard step 1 — risk profile picker. Three preset cards (driven by
- * `STRATEGIES`) + a "Custom" alt-path link. Page logic is just:
- *   - read selected profile from the compass store
- *   - fetch /markets once for the shared "live yield venue" APR
- *   - hand off to `StrategyCard` and `CustomPathCard` for visuals
- */
 export default function StrategyPage() {
   const strategy = useCompassStore((s) => s.strategy);
   const setStrategy = useCompassStore((s) => s.setStrategy);
@@ -39,11 +32,6 @@ export default function StrategyPage() {
     return () => ac.abort();
   }, []);
 
-  // The single number every card shares: today's best live APR across
-  // the venues the engine can actually use. Real differentiation
-  // between strategies is in the knobs (cap %, delta bps, gas
-  // ceiling), not in the rate they earn — so showing the same
-  // headline rate is honest.
   const bestApr = markets
     .filter((m) => m.is_yield_venue)
     .reduce((max, m) => Math.max(max, m.apr), 0);

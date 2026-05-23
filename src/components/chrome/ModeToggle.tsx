@@ -6,16 +6,6 @@ import clsx from "clsx";
 import { MaskIcon } from "@/components/visuals/MaskIcon";
 import { useUIStore } from "@/store/ui";
 
-/**
- * Header-centered segmented control to switch between the AI chat mode
- * (/chat) and the click-flow wizard (/create/*). Active section is
- * derived from the current pathname so the toggle reflects truth even
- * when the user lands via a deep link.
- *
- * Clicking Chat while already on /chat dispatches a "new chat" signal
- * via the UI store — the chat page subscribes and clears messages +
- * server history. Matches the gotchipus + ChatGPT mental model.
- */
 export function ModeToggle() {
   const pathname = usePathname();
   const router = useRouter();

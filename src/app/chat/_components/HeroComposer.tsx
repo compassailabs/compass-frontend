@@ -13,12 +13,6 @@ const EXAMPLES = [
   "Pause everything for now.",
 ];
 
-/**
- * Empty-state hero — the layout the user sees on a fresh chat session.
- * Spinning star + tagline up top, composer in the middle, a few example
- * prompts at the bottom. Once any messages exist `ChatPage` swaps to
- * the conversation layout.
- */
 export function HeroComposer({
   input,
   onChange,

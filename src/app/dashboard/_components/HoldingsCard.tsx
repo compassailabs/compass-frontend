@@ -2,11 +2,6 @@ import { AssetIcon } from "@/components/visuals/AssetIcon";
 import type { PositionHolding } from "@/lib/api";
 import { chainLabel, formatUsdc, protocolLabel } from "@/lib/format";
 
-/**
- * Holdings table — one row per active venue with non-dust balance.
- * Shows token icon (USDC + chain badge), venue name, chain + share,
- * and USDC + USD equivalents.
- */
 export function HoldingsCard({
   holdings,
   total,

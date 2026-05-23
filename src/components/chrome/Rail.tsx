@@ -31,16 +31,6 @@ const stepClickable =
 const stepLocked =
   "text-silver-5 cursor-not-allowed opacity-60";
 
-/**
- * Left wizard sidebar — purely the step navigator. The global
- * `AppHeader` owns the logo, wallet, network indicator, and mode
- * toggle, so this sidebar no longer duplicates any of that chrome.
- *
- * Steps the user hasn't reached yet are rendered as a non-clickable
- * span: jumping ahead skips validation (you could land on Review
- * before picking an amount) and just leaves the wizard in an
- * inconsistent state. Going *back* to a completed step is fine.
- */
 export function Rail() {
   const pathname = usePathname();
   const path = useCompassStore((s) => s.path);

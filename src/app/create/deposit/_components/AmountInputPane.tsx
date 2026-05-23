@@ -13,11 +13,6 @@ const paneLabel =
   "flex justify-between items-center font-mono text-[10px] font-medium " +
   "tracking-[0.15em] uppercase text-silver-4";
 
-/**
- * Left pane of the Deposit step: source wallet header, the big USDC
- * input + presets, and the "already in Compass / after this deposit"
- * before/after summary at the bottom.
- */
 export function AmountInputPane({
   amount,
   onAmountChange,

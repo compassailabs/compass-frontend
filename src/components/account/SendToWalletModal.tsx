@@ -11,17 +11,6 @@ import { formatUsdc } from "@/lib/format";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Send to wallet — final custody exit. Moves every USDC the Compass
- * smart account holds on Arc to the user's EOA on Arc. After this
- * the money is in the user's wallet, outside Compass entirely.
- *
- * Doesn't touch AAVE positions or Arbitrum balance — those are still
- * in custody. Run **Withdraw** first if you want a complete exit.
- * The two-step UX (Withdraw → Send to wallet) is intentional: many
- * users will pause earning without actually exiting, so collapsing
- * them would lose a useful state.
- */
 export function SendToWalletModal() {
   const open = useUIStore((s) => s.sendToWalletModalOpen);
   const close = useUIStore((s) => s.closeSendToWalletModal);
@@ -122,7 +111,6 @@ export function SendToWalletModal() {
           </button>
         </header>
 
-        {/* Source */}
         <div className="mb-3 rounded-[14px] border border-line-2 bg-black/30 p-4 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4">
@@ -164,7 +152,6 @@ export function SendToWalletModal() {
           </svg>
         </div>
 
-        {/* Destination */}
         <div className="mb-4 rounded-[14px] border border-mint/[0.25] bg-mint/[0.04] p-4 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-mint">

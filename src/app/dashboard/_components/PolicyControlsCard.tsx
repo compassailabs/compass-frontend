@@ -4,11 +4,6 @@ import clsx from "clsx";
 
 import { useUserStateStore } from "@/store/userState";
 
-/**
- * Read-only display of the committed policy's risk knobs + a single
- * pause/resume CTA. The numbers shown here are what the engine
- * actually enforces on every tick.
- */
 export function PolicyControlsCard({
   policy,
   onPause,

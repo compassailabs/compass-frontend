@@ -10,18 +10,6 @@ import { ThinkingPanel } from "./ThinkingPanel";
 import { ToolChips } from "./ToolChips";
 import type { Message } from "./types";
 
-/**
- * One chat bubble — branches on user vs assistant. The assistant
- * branch wires up the reasoning panel, skill chips, markdown body, and
- * the per-message copy button.
- *
- * `React.memo` is critical for streaming perf: each rAF tick we patch
- * just the in-flight assistant message (new object reference), but the
- * surrounding `messages.slice()` produces a new array. Without memo,
- * React would re-render every history bubble + every MarkdownMessage
- * tree 60 times per second. With memo + reference-stable history
- * entries, only the streaming bubble re-parses.
- */
 export const Bubble = memo(function Bubble({ message }: { message: Message }) {
   if (message.role === "user") {
     return (

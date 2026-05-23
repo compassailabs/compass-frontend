@@ -5,16 +5,6 @@ import clsx from "clsx";
 
 import { getMarkets, type MarketEntry } from "@/lib/api";
 
-/**
- * Hero tagline chip: [USDC icon] [APR big mint] / [● USDC · AAVE].
- * Per Boss's design — the APR is the headline number (people are here
- * for yield, not for being told they have USDC). The asset + venue sit
- * underneath as a small mono caption with a live mint dot.
- *
- * If APR hasn't loaded the chip renders with a placeholder so the
- * sentence still reads cleanly; the number fades in once /markets
- * resolves.
- */
 export function HeroTagline() {
   const [apr, setApr] = useState<number | null>(null);
 

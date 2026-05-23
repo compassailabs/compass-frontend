@@ -2,11 +2,6 @@ import clsx from "clsx";
 
 import { StarMark } from "@/components/visuals/StarMark";
 
-/**
- * Top hero block with the spinning star, status pill, big "live"
- * headline, identity line, and Open dashboard CTA that fades in once
- * the launch reaches `live=true`.
- */
 export function LaunchHero({
   live,
   heroStatus,
