@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="128" height="128" role="img" aria-label="useCompassAI favicon 128"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><title>useCompassAI favicon · 128</title><defs>
+    <linearGradient id="silver" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"></stop>
+      <stop offset="40%" stop-color="#E2E8F0"></stop>
+      <stop offset="80%" stop-color="#B8C2D1"></stop>
+      <stop offset="100%" stop-color="#7E8BA0"></stop>
+    </linearGradient>
+    <linearGradient id="silverHi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"></stop>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+    </linearGradient>
+    <linearGradient id="arcBg" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#0A1428"></stop>
+      <stop offset="100%" stop-color="#3A5878"></stop>
+    </linearGradient>
+  </defs><rect x="0" y="0" width="100" height="100" rx="18" fill="url(#arcBg)"></rect><path d="M 50,4 L 54,46 L 96,50 L 54,54 L 50,96 L 46,54 L 4,50 L 46,46 Z" fill="url(#silver)"></path><path d="M 50,4 L 54,46 L 96,50 L 54,54 L 50,96 L 46,54 L 4,50 L 46,46 Z" fill="url(#silverHi)"></path></svg>

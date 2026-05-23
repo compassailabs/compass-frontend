@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+ * Compass frontend — design tokens + body baseline + Grid bg.
+ * Everything else lives as Tailwind utility classes in JSX.
+ * Only patterns Tailwind can't express ergonomically end up in
+ * the @layer components block below (data-attribute color maps,
+ * mask-composite gradient borders, ::after pseudo-element marks).
+ * Keyframes/animations are declared in tailwind.config.ts.
+ * ============================================================ */
+
+:root {
+  --arc-deep:    #0A1428;
+  --arc-mid:     #1B2E4F;
+  --arc-bright:  #3A5878;
+  --silver-1:    #FFFFFF;
+  --silver-2:    #E2E8F0;
+  --silver-3:    #B8C2D1;
+  --silver-4:    #7E8BA0;
+  --silver-5:    #475569;
+  --mint:        #7FDFB7;
+  --amber:       #E8B339;
+  --steel:       #6FA3D9;
+  --line-1:      rgba(226, 232, 240, 0.06);
+  --line-2:      rgba(226, 232, 240, 0.12);
+  --line-3:      rgba(226, 232, 240, 0.22);
+  --f-display:   "Inter Tight", "Inter", system-ui, sans-serif;
+  --f-body:      "Inter", system-ui, sans-serif;
+  --f-mono:      "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+
+  /* Utility: hide scrollbar but keep scroll. Used by the chat thread
+     so the conversation surface doesn't get a chunky default scrollbar
+     during streaming. Scroll behaviour itself is unchanged. */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* Cover the overscroll / area-outside-body too, so neither macOS
+     rubber-banding nor the browser's default checkered "no-bg" pattern
+     ever shows through at the top or bottom of the viewport. */
+  html { background: var(--arc-deep); }
+
+  body {
+    background: var(--arc-deep);
+    color: var(--silver-2);
+    font-family: var(--f-body);
+    font-size: 14px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Grid background — fixed 56px grid with radial mask. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(226, 232, 240, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(226, 232, 240, 0.03) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 80%);
+            mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 80%);
+  }
+
+  ::selection { background: var(--silver-2); color: var(--arc-deep); }
+}
+
+@layer components {
+  /* ---------- Chain color map (data-c attribute) ----------
+   * Used by amount-page deploy tiles, markets-page filter pills, and
+   * market-card chain badges. Apply with: <span class="chain-color"
+   * data-c="arc">A</span>. Inline because Tailwind data-* arbitrary
+   * variants would repeat 7 chains × 2 properties = noisy. */
+  .chain-color[data-c="arc"]       { background: linear-gradient(135deg, var(--silver-1), var(--silver-3)); color: var(--arc-deep); }
+  .chain-color[data-c="base"]      { background: #0052FF; color: #fff; }
+  .chain-color[data-c="ethereum"]  { background: linear-gradient(135deg, #627EEA, #3C3CDD); color: #fff; }
+  .chain-color[data-c="arbitrum"]  { background: linear-gradient(135deg, #2D374B, #28A0F0); color: #fff; }
+  .chain-color[data-c="polygon"]   { background: linear-gradient(135deg, #8247E5, #6D3FCF); color: #fff; }
+  .chain-color[data-c="optimism"]  { background: #FF0420; color: #fff; }
+  .chain-color[data-c="avalanche"] { background: #E84142; color: #fff; }
+
+  /* ---------- Gradient border via mask-composite ----------
+   * Apply to a relative container with the same border-radius as the
+   * ::before; renders a 1px gradient ring. Used by AllocationPreview /
+   * preview-pane / sign-section. */
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 35%, transparent 70%, rgba(127, 223, 183, 0.18));
+    -webkit-mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ---------- Hover sheen ----------
+   * Radial ellipse from top-right that fades in on hover. Used by
+   * cmp-card / market-card / step-card. */
+  .hover-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+  .hover-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse 80% 60% at 100% 0%, rgba(226, 232, 240, 0.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .hover-sheen:hover::after { opacity: 1; }
+
+  /* ---------- Step rail left bars (current / done) ---------- */
+  .step-bar-current::before,
+  .step-bar-done::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    border-radius: 2px;
+  }
+  .step-bar-current::before { background: linear-gradient(180deg, var(--silver-1), var(--silver-3)); }
+  .step-bar-done::before    { background: var(--mint); }
+
+  /* ---------- Check marks (CSS-drawn corner check) ----------
+   * Used on selected cmp-radio (strategy) and selected mc-check (markets).
+   * Two-size variants because the source pixel offsets differ. */
+  .check-mark-sm::after,
+  .check-mark-md::after {
+    content: "";
+    position: absolute;
+    border-right: 1.5px solid var(--arc-deep);
+    border-bottom: 1.5px solid var(--arc-deep);
+    transform: rotate(45deg);
+  }
+  .check-mark-sm::after { left: 7px; top: 4px; width: 5px; height: 10px; }
+  .check-mark-md::after { left: 6px; top: 3px; width: 6px; height: 11px; }
+
+  /* ---------- "Home" corner badge on chain-tile ---------- */
+  .home-badge::after {
+    content: "Home";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 1px 5px;
+    border-radius: 100px;
+    background: rgba(127, 223, 183, 0.1);
+    color: var(--mint);
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Button reset for clickable cards ----------
+   * Tailwind utilities don't override UA button text-align/font/width,
+   * so apply this when the card root is a <button>. */
+  .card-button {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+}
+
+/* ---------- Keyframes ----------
+ * Tailwind aliases declared in tailwind.config.ts (`animate-mint-pulse`,
+ * `animate-blink`, `animate-spin-slow`, `animate-amber-pulse`,
+ * `animate-flight-line`, `animate-spin-fast`). */
+@keyframes mintPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(127, 223, 183, 0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(127, 223, 183, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(127, 223, 183, 0); }
+}
+@keyframes amberPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(232, 179, 57, 0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(232, 179, 57, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 179, 57, 0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes flightLine {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
