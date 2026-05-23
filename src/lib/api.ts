@@ -1,8 +1,13 @@
 /**
- * Client for the compass-rs HTTP backend. Set NEXT_PUBLIC_API_URL in
- * .env.local for production; defaults to the dev server bind.
+ * Client for the compass-rs HTTP backend.
+ *
+ * Always same-origin `/api/*` — Next.js rewrites in `next.config.mjs`
+ * proxy `/api/*` to `BACKEND_URL` server-side. The real backend host
+ * never reaches the browser bundle, and we get zero-CORS, single-domain
+ * deployment for free. Set `BACKEND_URL` (no `NEXT_PUBLIC_` prefix) in
+ * `.env.local` or the host's environment.
  */
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8787";
+export const API_BASE = "/api";
 
 export type ChatRole = "user" | "assistant";
 
@@ -422,7 +427,7 @@ export async function getPosition(
   user: string,
   signal?: AbortSignal,
 ): Promise<Position | null> {
-  const resp = await fetch(`${API_BASE}/debug/position/${user}`, { signal });
+  const resp = await fetch(`${API_BASE}/position/${user}`, { signal });
   if (resp.status === 404) return null;
   if (!resp.ok) throw new Error(`getPosition ${resp.status}`);
   return resp.json();
