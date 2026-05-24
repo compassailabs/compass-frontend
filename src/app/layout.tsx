@@ -55,6 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESC,
+    images: "/og.png",
     url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
@@ -64,6 +65,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESC,
+    images: "/og.png"
   },
   icons: {
     icon: [
