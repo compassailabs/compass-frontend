@@ -1,5 +1,6 @@
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import type { FlightLine } from "./state";
 
 export function FlightRecorder({ lines }: { lines: FlightLine[] }) {
@@ -33,22 +34,16 @@ function FlightRow({ line: l }: { line: FlightLine }) {
       <span
         className={clsx(
           "w-[14px] h-[14px] grid place-items-center",
-          "[&_svg]:w-3 [&_svg]:h-3 [&_svg]:stroke-current [&_svg]:fill-none [&_svg]:[stroke-width:2.4] [&_svg]:[stroke-linecap:round] [&_svg]:[stroke-linejoin:round]",
-          l.glyph === "run"
-            ? "text-silver-2 [&_svg]:animate-spin-fast"
-            : "text-mint",
+          l.glyph === "run" ? "text-silver-2" : "text-mint",
         )}
       >
-        {l.glyph === "ok" ? (
-          <svg viewBox="0 0 24 24">
-            <path d="M5 13l4 4L19 7" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 7v5l3 2" />
-          </svg>
-        )}
+        <Icon
+          name={l.glyph === "ok" ? "check" : "clock"}
+          className={clsx(
+            "w-3 h-3",
+            l.glyph === "run" && "animate-spin-fast",
+          )}
+        />
       </span>
       <span className="text-silver-2 tracking-[0.01em] [&_b]:text-silver-1 [&_b]:font-semibold">
         {l.msg}

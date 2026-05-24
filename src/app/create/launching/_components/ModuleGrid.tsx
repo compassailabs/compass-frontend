@@ -1,5 +1,6 @@
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import type { ModuleDef } from "./timeline";
 import type { State } from "./state";
 
@@ -57,12 +58,7 @@ export function ModuleGrid({
                 )}
               >
                 {done ? (
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-[14px] h-[14px] stroke-mint fill-none stroke-[2.5] [stroke-linecap:round] [stroke-linejoin:round]"
-                  >
-                    <path d="M5 13l4 4L19 7" />
-                  </svg>
+                  <Icon name="check" className="w-[14px] h-[14px] text-mint" />
                 ) : (
                   <span className="w-3 h-3 rounded-full border-[1.5px] border-line-3 border-t-silver-1 animate-spin-fast" />
                 )}

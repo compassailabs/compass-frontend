@@ -10,6 +10,7 @@ import { ProgressCard } from "@/components/wizard/ProgressCard";
 import { StepHead } from "@/components/wizard/StepHead";
 import { ContinueButton } from "@/components/wizard/ContinueButton";
 import { HintFooter } from "@/components/wizard/HintFooter";
+import { Icon } from "@/components/visuals/Icon";
 import {
   compilePolicyFromWizard,
   getMarkets,
@@ -98,15 +99,7 @@ export default function ReviewPage() {
           <ContinueButton
             from="review"
             label="Sign & deploy"
-            icon={
-              <svg
-                viewBox="0 0 24 24"
-                className="w-[14px] h-[14px] stroke-current fill-none stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"
-              >
-                <path d="M3 17c4-3 6-6 9-6s5 3 9 0" />
-                <path d="M3 21h18" />
-              </svg>
-            }
+            icon={<Icon name="signature" className="w-[14px] h-[14px]" />}
           />
         }
       />

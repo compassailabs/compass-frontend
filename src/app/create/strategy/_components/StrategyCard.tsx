@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import type { StrategyDef } from "./strategies";
 
 const cardBase =
@@ -82,12 +83,7 @@ export function StrategyCard({
             key={i}
             className="grid grid-cols-[14px_1fr] gap-[10px] items-start text-[13px] text-silver-3 leading-[1.45] [&_b]:text-silver-1 [&_b]:font-medium"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="w-[14px] h-[14px] mt-[3px] fill-none stroke-silver-3 stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"
-            >
-              <path d="M5 13l4 4L19 7" />
-            </svg>
+            <Icon name="check" className="w-[14px] h-[14px] mt-[3px] text-silver-3" />
             <span>{f}</span>
           </li>
         ))}

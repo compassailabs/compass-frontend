@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
 
+import { Icon } from "@/components/visuals/Icon";
 import { sendToWallet, type SendToWalletResponse } from "@/lib/api";
 import { txExplorerUrl } from "@/lib/explorers";
 import { formatUsdc } from "@/lib/format";
@@ -102,12 +103,7 @@ export function SendToWalletModal() {
             aria-label="Close"
             className="w-7 h-7 rounded-full border border-line-2 text-silver-3 hover:text-silver-1 hover:border-line-3 grid place-items-center disabled:opacity-40"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="w-3.5 h-3.5 fill-none stroke-current stroke-[1.8] [stroke-linecap:round]"
-            >
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
+            <Icon name="close" className="w-3.5 h-3.5" />
           </button>
         </header>
 
@@ -144,12 +140,7 @@ export function SendToWalletModal() {
         </div>
 
         <div className="mb-3 flex items-center justify-center text-silver-3">
-          <svg
-            viewBox="0 0 24 24"
-            className="w-5 h-5 fill-none stroke-current stroke-[1.6]"
-          >
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
+          <Icon name="arrow-down" className="w-5 h-5" />
         </div>
 
         <div className="mb-4 rounded-[14px] border border-mint/[0.25] bg-mint/[0.04] p-4 flex flex-col gap-2">

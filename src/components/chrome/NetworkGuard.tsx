@@ -4,6 +4,7 @@ import { useAccount, useSwitchChain } from "wagmi";
 import { toast } from "sonner";
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import { arcTestnet } from "@/lib/wagmi";
 
 export function NetworkGuard() {
@@ -31,13 +32,7 @@ export function NetworkGuard() {
     <div className="shrink-0 border-b border-amber/[0.35] bg-amber/[0.08]">
       <div className="max-w-[1440px] mx-auto px-6 py-2.5 flex items-center justify-between gap-3 text-[12.5px]">
         <div className="flex items-center gap-2 text-amber min-w-0">
-          <svg
-            viewBox="0 0 24 24"
-            className="w-[14px] h-[14px] fill-none stroke-current stroke-[1.8] [stroke-linecap:round] [stroke-linejoin:round] shrink-0"
-          >
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 8v4M12 16h.01" />
-          </svg>
+          <Icon name="alert-circle" className="w-[14px] h-[14px]" />
           <span className="truncate">
             Wrong network — you&apos;re on{" "}
             <b className="font-semibold">{currentLabel}</b>. Compass

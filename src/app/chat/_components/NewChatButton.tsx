@@ -2,6 +2,8 @@
 
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
+
 export function NewChatButton({
   onClick,
   busy,
@@ -22,12 +24,7 @@ export function NewChatButton({
       aria-label="Start a new chat"
       title="Clear conversation and start over"
     >
-      <svg
-        viewBox="0 0 24 24"
-        className="w-[12px] h-[12px] fill-none stroke-current stroke-[1.8] [stroke-linecap:round] [stroke-linejoin:round]"
-      >
-        <path d="M12 5v14M5 12h14" />
-      </svg>
+      <Icon name="plus" className="w-[12px] h-[12px]" />
       {busy ? "Clearing…" : "New chat"}
     </button>
   );

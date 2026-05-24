@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
+
 import {
   CHAIN_FILTERS,
   PROTOCOL_FILTERS,
@@ -85,13 +87,7 @@ export function Filters({
         </FilterGroup>
       </div>
       <label className="inline-flex items-center gap-[9px] px-[14px] py-[9px] rounded-pill bg-white/[0.04] border border-line-2 min-w-[220px] max-[880px]:min-w-0">
-        <svg
-          viewBox="0 0 24 24"
-          className="w-[13px] h-[13px] text-silver-4 fill-none stroke-current stroke-[1.6]"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <path d="M21 21l-4.3-4.3" />
-        </svg>
+        <Icon name="search" className="w-[13px] h-[13px] text-silver-4" />
         <input
           ref={searchRef}
           type="text"

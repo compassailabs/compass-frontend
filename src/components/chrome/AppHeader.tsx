@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-
 import { ModeToggle } from "@/components/chrome/ModeToggle";
+import { WalletButton } from "@/components/chrome/WalletButton";
 import { SmartAccountPill } from "@/components/account/SmartAccountPill";
+import { Icon } from "@/components/visuals/Icon";
 import { StarMark } from "@/components/visuals/StarMark";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
@@ -53,22 +53,12 @@ export function AppHeader() {
             >
               <i className="w-[6px] h-[6px] rounded-full bg-amber animate-amber-pulse" />
               <span className="hidden sm:inline">Setup session</span>
-              <svg
-                viewBox="0 0 24 24"
-                className="w-[14px] h-[14px] fill-none stroke-current stroke-[1.8] [stroke-linecap:round] [stroke-linejoin:round]"
-              >
-                <path d="M12 8v4M12 16h.01" />
-                <circle cx="12" cy="12" r="9" />
-              </svg>
+              <Icon name="alert-circle" className="w-[14px] h-[14px]" />
             </button>
           ) : (
             <SmartAccountPill />
           )}
-          <ConnectButton
-            accountStatus={{ smallScreen: "avatar", largeScreen: "address" }}
-            chainStatus="none"
-            showBalance={false}
-          />
+          <WalletButton />
         </div>
       </div>
     </header>

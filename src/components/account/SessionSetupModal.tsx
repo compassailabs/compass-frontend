@@ -5,9 +5,12 @@ import { useAccount } from "wagmi";
 import { toast } from "sonner";
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import { setupSession } from "@/lib/api";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
+
+type Mode = "notSet" | "active" | "expired";
 
 export function SessionSetupModal() {
   const open = useUIStore((s) => s.sessionModalOpen);
@@ -28,7 +31,7 @@ export function SessionSetupModal() {
 
   if (!open) return null;
 
-  async function onSetup() {
+  async function onPrimary() {
     if (!address) {
       toast.error("Connect a wallet first.");
       return;
@@ -37,10 +40,7 @@ export function SessionSetupModal() {
     try {
       const result = await setupSession(address);
       toast.success(
-        `Session active. Compass account: ${result.status.arc.address.slice(
-          0,
-          10,
-        )}…`,
+        `Session ${mode === "notSet" ? "active" : "renewed"}. Compass account: ${result.status.arc.address.slice(0, 10)}…`,
       );
       await refresh();
       close();
@@ -55,6 +55,27 @@ export function SessionSetupModal() {
   const arb = session?.arbitrum_sepolia;
   const sameAddress = session?.addresses_match ?? false;
 
+  const nowSec = Math.floor(Date.now() / 1000);
+  const expiresAt = session
+    ? Math.min(
+        session.arc.session_expires_at || Infinity,
+        session.arbitrum_sepolia.session_expires_at || Infinity,
+      )
+    : Infinity;
+  const remainingSec = expiresAt - nowSec;
+
+  const mode: Mode = !session?.ready
+    ? "notSet"
+    : remainingSec <= 0
+      ? "expired"
+      : "active";
+
+  const copy = COPY[mode];
+  const introText =
+    mode === "active"
+      ? `Active — expires in ${formatRemaining(remainingSec)}. Compass can rebalance USDC across your whitelisted venues without prompting you each time.`
+      : copy.intro;
+
   return (
     <>
       <div
@@ -66,7 +87,7 @@ export function SessionSetupModal() {
       />
       <div
         role="dialog"
-        aria-label="Set up Compass session"
+        aria-label="Compass session"
         className={clsx(
           "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[70]",
           "w-[520px] max-w-[92vw] rounded-[20px] border border-line-2",
@@ -75,11 +96,22 @@ export function SessionSetupModal() {
       >
         <header className="flex items-start justify-between gap-3 mb-4">
           <div>
-            <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4 mb-1">
-              One-time setup
+            <div
+              className={clsx(
+                "font-mono text-[10px] tracking-[0.14em] uppercase mb-1 inline-flex items-center gap-1.5",
+                copy.eyebrowClass,
+              )}
+            >
+              <i
+                className={clsx(
+                  "w-[6px] h-[6px] rounded-full",
+                  copy.dotClass,
+                )}
+              />
+              {copy.eyebrow}
             </div>
             <h2 className="font-display text-[20px] font-semibold text-silver-1 m-0 leading-[1.2]">
-              Set up your Compass session
+              {copy.title}
             </h2>
           </div>
           <button
@@ -91,40 +123,43 @@ export function SessionSetupModal() {
             aria-label="Close"
             className="w-7 h-7 rounded-full border border-line-2 text-silver-3 hover:text-silver-1 hover:border-line-3 grid place-items-center disabled:opacity-40"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="w-3.5 h-3.5 fill-none stroke-current stroke-[1.8] [stroke-linecap:round]"
-            >
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
+            <Icon name="close" className="w-3.5 h-3.5" />
           </button>
         </header>
 
         <p className="text-[13.5px] text-silver-3 leading-[1.55] mb-4">
-          Compass needs a one-time on-chain bootstrap before it can act on
-          your behalf. This deploys your smart account and grants the agent
-          a tightly-scoped, 24-hour session key.
+          {introText}
         </p>
 
-        <ul className="flex flex-col gap-2 mb-4 text-[12.5px] text-silver-2">
-          <Bullet>
-            Deploys your <b className="text-silver-1">Compass account</b> on
-            Arc and Arbitrum Sepolia — same address on both chains
-          </Bullet>
-          <Bullet>
-            Registers an agent session key valid for{" "}
-            <b className="text-silver-1">24 hours</b>
-          </Bullet>
-          <Bullet>
-            Permissions restricted to{" "}
-            <b className="text-silver-1">AAVE supply/withdraw</b> and{" "}
-            <b className="text-silver-1">Gateway deposit/withdraw</b> — agent
-            cannot move funds anywhere else
-          </Bullet>
-          <Bullet>
-            Revoke any time from the Strategy panel (one signature)
-          </Bullet>
-        </ul>
+        {mode === "notSet" && (
+          <ul className="flex flex-col gap-2 mb-4 text-[12.5px] text-silver-2">
+            <Bullet>
+              Deploys your <b className="text-silver-1">Compass account</b> on
+              Arc and Arbitrum Sepolia — same address on both chains
+            </Bullet>
+            <Bullet>
+              Registers an agent session key valid for{" "}
+              <b className="text-silver-1">24 hours</b>
+            </Bullet>
+            <Bullet>
+              Permissions restricted to{" "}
+              <b className="text-silver-1">AAVE supply/withdraw</b> and{" "}
+              <b className="text-silver-1">Gateway deposit/withdraw</b> — agent
+              cannot move funds anywhere else
+            </Bullet>
+            <Bullet>
+              Revoke any time from the Strategy panel (one signature)
+            </Bullet>
+          </ul>
+        )}
+
+        {mode !== "notSet" && (
+          <div className="mb-4 rounded-[12px] border border-line-1 bg-black/20 p-3 text-[11.5px] text-silver-3 leading-[1.55]">
+            Agent is scoped to <b className="text-silver-1">AAVE supply/withdraw</b> and{" "}
+            <b className="text-silver-1">Gateway deposit/withdraw</b> only. Renewing
+            re-signs the same scope for another 24 hours.
+          </div>
+        )}
 
         {arc && arb && (
           <div className="mb-5 rounded-[14px] border border-line-2 bg-black/30 p-4 flex flex-col gap-3">
@@ -137,12 +172,7 @@ export function SessionSetupModal() {
                   {arc.address}
                 </div>
                 <div className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-mono text-mint">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-3 h-3 fill-none stroke-current stroke-[2.4] [stroke-linecap:round] [stroke-linejoin:round]"
-                  >
-                    <path d="M5 13l4 4L19 7" />
-                  </svg>
+                  <Icon name="check" className="w-3 h-3" />
                   Same address on Arc and Arbitrum Sepolia
                 </div>
               </div>
@@ -208,11 +238,11 @@ export function SessionSetupModal() {
             disabled={running}
             className="px-4 py-2 rounded-pill border border-line-2 text-[13px] text-silver-3 hover:text-silver-1 hover:border-line-3 disabled:opacity-40 transition-colors"
           >
-            Later
+            {copy.dismissLabel}
           </button>
           <button
             type="button"
-            onClick={onSetup}
+            onClick={onPrimary}
             disabled={running || !isConnected}
             className={clsx(
               "inline-flex items-center gap-2 px-5 py-2 rounded-pill text-[13px] font-medium transition-all",
@@ -223,7 +253,7 @@ export function SessionSetupModal() {
             {running && (
               <span className="w-3 h-3 rounded-full border-[1.5px] border-arc-deep border-t-transparent animate-spin-fast" />
             )}
-            {running ? "Setting up…" : session?.ready ? "Refresh" : "Set up session"}
+            {running ? copy.runningLabel : copy.primaryLabel}
           </button>
         </footer>
       </div>
@@ -231,15 +261,65 @@ export function SessionSetupModal() {
   );
 }
 
+const COPY: Record<
+  Mode,
+  {
+    eyebrow: string;
+    eyebrowClass: string;
+    dotClass: string;
+    title: string;
+    intro: string;
+    primaryLabel: string;
+    runningLabel: string;
+    dismissLabel: string;
+  }
+> = {
+  notSet: {
+    eyebrow: "One-time setup",
+    eyebrowClass: "text-silver-4",
+    dotClass: "bg-silver-4",
+    title: "Set up your Compass session",
+    intro:
+      "Compass needs a one-time on-chain bootstrap before it can act on your behalf. This deploys your smart account and grants the agent a tightly-scoped, 24-hour session key.",
+    primaryLabel: "Set up session",
+    runningLabel: "Setting up…",
+    dismissLabel: "Later",
+  },
+  active: {
+    eyebrow: "Session active",
+    eyebrowClass: "text-mint",
+    dotClass: "bg-mint animate-mint-pulse",
+    title: "Your Compass session",
+    intro: "",
+    primaryLabel: "Renew now",
+    runningLabel: "Renewing…",
+    dismissLabel: "Done",
+  },
+  expired: {
+    eyebrow: "Session expired",
+    eyebrowClass: "text-amber",
+    dotClass: "bg-amber animate-amber-pulse",
+    title: "Renew your Compass session",
+    intro:
+      "Your session key has expired. Compass can't rebalance or act on your behalf until you re-sign — it takes one transaction.",
+    primaryLabel: "Renew session",
+    runningLabel: "Renewing…",
+    dismissLabel: "Later",
+  },
+};
+
+function formatRemaining(sec: number): string {
+  if (sec <= 0) return "0m";
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  if (h >= 1) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="grid grid-cols-[14px_1fr] gap-[10px] items-start text-[13px] text-silver-2 leading-[1.5]">
-      <svg
-        viewBox="0 0 24 24"
-        className="w-[14px] h-[14px] mt-[3px] fill-none stroke-mint stroke-[2.2] [stroke-linecap:round] [stroke-linejoin:round]"
-      >
-        <path d="M5 13l4 4L19 7" />
-      </svg>
+      <Icon name="check" className="w-[14px] h-[14px] mt-[3px] text-mint" />
       <span>{children}</span>
     </li>
   );

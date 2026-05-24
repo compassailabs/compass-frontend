@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Icon } from "@/components/visuals/Icon";
 import type { Tab } from "./types";
 
 export function EmptyState({ tab }: { tab: Tab }) {
@@ -21,13 +22,7 @@ export function EmptyState({ tab }: { tab: Tab }) {
   return (
     <div className="rounded-[18px] border border-line-2 bg-white/[0.03] p-10 text-center flex flex-col items-center gap-3">
       <div className="w-10 h-10 rounded-2xl bg-white/[0.04] border border-line-2 grid place-items-center text-silver-3">
-        <svg
-          viewBox="0 0 24 24"
-          className="w-5 h-5 fill-none stroke-current stroke-[1.6]"
-        >
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 7v5l3 2" />
-        </svg>
+        <Icon name="clock" className="w-5 h-5" />
       </div>
       <h3 className="m-0 font-display text-[17px] text-silver-1">{l.title}</h3>
       <p className="m-0 text-[13px] text-silver-3 max-w-[380px] leading-[1.55]">

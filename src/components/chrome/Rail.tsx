@@ -11,6 +11,7 @@ import {
   stepHref,
   type StepKey,
 } from "@/lib/path";
+import { Icon } from "@/components/visuals/Icon";
 import { useCompassStore } from "@/store/compass";
 
 const STEP_FROM_PATH: Record<string, StepKey> = {
@@ -69,15 +70,13 @@ export function Rail() {
               <span className="font-display text-[14px] font-medium tracking-[-0.012em]">
                 {STEP_NAMES[k]}
               </span>
-              <svg
-                viewBox="0 0 24 24"
+              <Icon
+                name="check"
                 className={clsx(
-                  "w-[14px] h-[14px] fill-none stroke-mint stroke-2 [stroke-linecap:round] [stroke-linejoin:round] opacity-0 transition-opacity",
-                  isDone && "opacity-100 stroke-[2.4]",
+                  "w-[14px] h-[14px] text-mint opacity-0 transition-opacity",
+                  isDone && "opacity-100",
                 )}
-              >
-                <path d="M5 13l4 4L19 7" />
-              </svg>
+              />
             </>
           );
 

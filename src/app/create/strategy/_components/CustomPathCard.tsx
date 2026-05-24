@@ -1,15 +1,15 @@
 import Link from "next/link";
 
+import { Icon } from "@/components/visuals/Icon";
+
 export function CustomPathCard({ liveVenueCount }: { liveVenueCount: number }) {
   return (
     <Link
       href="/create/markets?path=custom"
       className="group mt-[14px] grid grid-cols-[52px_1fr_auto_auto] gap-[22px] items-center px-[26px] py-[22px] rounded-[18px] no-underline text-inherit border border-dashed border-line-3 backdrop-blur-xl transition-all duration-[220ms] bg-gradient-to-b from-white/[0.025] to-white/[0.008] relative overflow-hidden hover:border-solid hover:border-silver-3 hover:bg-gradient-to-b hover:from-white/[0.045] hover:to-white/[0.012] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] max-[880px]:grid-cols-[44px_1fr] max-[880px]:gap-[14px] max-[880px]:px-5 max-[880px]:py-[18px]"
     >
-      <div className="w-[52px] h-[52px] rounded-[14px] grid place-items-center border border-line-2 bg-white/[0.035] text-silver-2 [&_svg]:w-[22px] [&_svg]:h-[22px] [&_svg]:fill-none [&_svg]:stroke-current [&_svg]:stroke-[1.6] [&_svg]:[stroke-linecap:round] [&_svg]:[stroke-linejoin:round]">
-        <svg viewBox="0 0 24 24">
-          <path d="M4 6h16M4 12h16M4 18h10" />
-        </svg>
+      <div className="w-[52px] h-[52px] rounded-[14px] grid place-items-center border border-line-2 bg-white/[0.035] text-silver-2">
+        <Icon name="menu" className="w-[22px] h-[22px]" />
       </div>
       <div className="flex flex-col gap-1">
         <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-silver-4 font-medium">

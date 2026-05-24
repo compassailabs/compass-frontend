@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useAccount } from "wagmi";
 
+import { Icon } from "@/components/visuals/Icon";
 import { getEarnings, type EarningsResponse, type MarketEntry, getMarkets } from "@/lib/api";
 import { formatUsdc } from "@/lib/format";
 
@@ -121,15 +122,7 @@ function Stat({
 }
 
 function InfoDot() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="w-3 h-3 text-silver-5 fill-none stroke-current stroke-[1.8] [stroke-linecap:round]"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 16v-5M12 8h.01" />
-    </svg>
-  );
+  return <Icon name="info" className="w-3 h-3 text-silver-5" />;
 }
 
 function SignedValue({

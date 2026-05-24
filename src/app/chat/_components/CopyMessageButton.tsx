@@ -4,6 +4,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
+
 export function CopyMessageButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   async function onCopy() {
@@ -19,17 +21,14 @@ export function CopyMessageButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={onCopy}
-      aria-label="Copy message"
+      aria-label={copied ? "Copied" : "Copy reply"}
       title={copied ? "Copied" : "Copy reply"}
       className={clsx(
-        "absolute bottom-2 right-2 px-2 py-[3px] rounded-pill border text-[10.5px] font-mono transition-all",
-        "border-line-2 bg-arc-deep/80 backdrop-blur-sm",
-        copied
-          ? "text-mint border-mint/[0.4]"
-          : "text-silver-3 opacity-0 group-hover:opacity-100 hover:text-silver-1 hover:border-line-3",
+        "inline-flex items-center transition-colors",
+        copied ? "text-mint" : "text-silver-4 hover:text-silver-1",
       )}
     >
-      {copied ? "Copied" : "Copy"}
+      <Icon name={copied ? "check" : "copy"} className="w-[14px] h-[14px]" />
     </button>
   );
 }

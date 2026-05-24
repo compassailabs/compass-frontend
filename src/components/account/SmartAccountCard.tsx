@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import { addressExplorerUrl } from "@/lib/explorers";
 import { useUIStore } from "@/store/ui";
 import { useUserStateStore } from "@/store/userState";
@@ -88,15 +89,13 @@ export function SmartAccountCard() {
                 className="px-2.5 py-1 rounded-pill border border-line-2 text-[11px] text-silver-2 hover:text-silver-1 hover:border-line-3 transition-colors inline-flex items-center gap-1"
               >
                 Explorer
-                <svg
-                  viewBox="0 0 12 12"
+                <Icon
+                  name="chevron-down"
                   className={clsx(
-                    "w-2.5 h-2.5 fill-none stroke-current stroke-[1.5] transition-transform",
+                    "w-2.5 h-2.5 transition-transform",
                     explorerOpen && "rotate-180",
                   )}
-                >
-                  <path d="M3 4.5l3 3 3-3" />
-                </svg>
+                />
               </button>
               {explorerOpen && (
                 <div

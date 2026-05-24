@@ -1,5 +1,6 @@
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import type { Policy } from "@/lib/api";
 
 import { SectionHead } from "./atoms";
@@ -38,12 +39,7 @@ export function GuardrailsSection({ policy }: { policy: Policy | null }) {
               key={i}
               className="grid grid-cols-[16px_1fr] gap-[10px] items-start text-[13px] text-silver-2 leading-[1.4] [&_b]:font-medium [&_b]:font-mono [&_b]:[font-feature-settings:'tnum'] [&_b]:text-silver-1"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="w-[14px] h-[14px] mt-[2px] fill-none stroke-mint [stroke-width:2.2] [stroke-linecap:round] [stroke-linejoin:round]"
-              >
-                <path d="M5 13l4 4L19 7" />
-              </svg>
+              <Icon name="check" className="w-[14px] h-[14px] mt-[2px] text-mint" />
               <span>{item}</span>
             </li>
           ))}

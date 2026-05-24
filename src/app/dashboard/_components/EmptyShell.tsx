@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { Icon } from "@/components/visuals/Icon";
+
 export function EmptyShell({
   title,
   body,
@@ -13,15 +15,7 @@ export function EmptyShell({
     <div className="h-full grid place-items-center px-6 py-10">
       <div className="text-center max-w-[460px] flex flex-col gap-4 items-center">
         <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-line-2 grid place-items-center text-silver-3">
-          <svg
-            viewBox="0 0 24 24"
-            className="w-6 h-6 fill-none stroke-current stroke-[1.6] [stroke-linecap:round] [stroke-linejoin:round]"
-          >
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
+          <Icon name="grid" className="w-6 h-6" />
         </div>
         <h2 className="m-0 font-display text-[20px] font-semibold tracking-[-0.018em] text-silver-1">
           {title}

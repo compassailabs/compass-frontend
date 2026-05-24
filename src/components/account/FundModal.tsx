@@ -12,6 +12,7 @@ import { parseUnits } from "viem";
 import { toast } from "sonner";
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import { arcTestnet } from "@/lib/wagmi";
 import { addressExplorerUrl, txExplorerUrl } from "@/lib/explorers";
 import { recordFunded } from "@/lib/api";
@@ -201,12 +202,7 @@ export function FundModal() {
             aria-label="Close"
             className="w-7 h-7 rounded-full border border-line-2 text-silver-3 hover:text-silver-1 hover:border-line-3 grid place-items-center disabled:opacity-40"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="w-3.5 h-3.5 fill-none stroke-current stroke-[1.8] [stroke-linecap:round]"
-            >
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
+            <Icon name="close" className="w-3.5 h-3.5" />
           </button>
         </header>
 
@@ -235,15 +231,13 @@ export function FundModal() {
                   className="px-2.5 py-1 rounded-pill border border-line-2 text-[11px] text-silver-2 hover:text-silver-1 hover:border-line-3 transition-colors inline-flex items-center gap-1"
                 >
                   Explorer
-                  <svg
-                    viewBox="0 0 12 12"
+                  <Icon
+                    name="chevron-down"
                     className={clsx(
-                      "w-2.5 h-2.5 fill-none stroke-current stroke-[1.5] transition-transform",
+                      "w-2.5 h-2.5 transition-transform",
                       explorerOpen && "rotate-180",
                     )}
-                  >
-                    <path d="M3 4.5l3 3 3-3" />
-                  </svg>
+                  />
                 </button>
                 {explorerOpen && (
                   <div

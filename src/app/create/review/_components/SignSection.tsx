@@ -1,5 +1,6 @@
 import clsx from "clsx";
 
+import { Icon } from "@/components/visuals/Icon";
 import { SectionHead } from "./atoms";
 import { sectionBase, sectionMint } from "./styles";
 
@@ -28,12 +29,7 @@ export function SignSection({
             key={i}
             className="flex items-start gap-[10px] text-[13px] text-silver-2 leading-[1.45] [&_b]:text-silver-1 [&_b]:font-medium"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="w-[14px] h-[14px] mt-[2px] shrink-0 fill-none stroke-mint stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"
-            >
-              <path d="M5 13l4 4L19 7" />
-            </svg>
+            <Icon name="check" className="w-[14px] h-[14px] mt-[2px] text-mint" />
             <span>{line}</span>
           </div>
         ))}

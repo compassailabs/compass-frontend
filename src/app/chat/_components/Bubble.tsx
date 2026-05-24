@@ -5,7 +5,6 @@ import { memo } from "react";
 import { MarkdownMessage } from "@/components/chat/MarkdownMessage";
 
 import { CopyMessageButton } from "./CopyMessageButton";
-import { StreamingPlaceholder } from "./StreamingPlaceholder";
 import { ThinkingPanel } from "./ThinkingPanel";
 import { ToolChips } from "./ToolChips";
 import type { Message } from "./types";
@@ -20,14 +19,29 @@ export const Bubble = memo(function Bubble({ message }: { message: Message }) {
       </div>
     );
   }
+
   const hasText = message.text.length > 0;
   const hasThinking = (message.thinking?.length ?? 0) > 0;
-  return (
-    <div className="self-start max-w-[88%] w-full">
-      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-mint mb-1">
-        Compass · {message.streaming ? "thinking…" : "replies"}
-      </div>
+  const hasTrace = (message.trace?.length ?? 0) > 0;
+  const idle = message.streaming && !hasText && !hasThinking && !hasTrace;
 
+  if (idle) {
+    return (
+      <div className="self-start max-w-[88%] w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/icons/logo-draw-in.svg"
+          alt="Thinking"
+          width={36}
+          height={36}
+          className="block"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="self-start max-w-[88%] w-full space-y-2">
       {hasThinking && (
         <ThinkingPanel
           text={message.thinking!}
@@ -35,25 +49,21 @@ export const Bubble = memo(function Bubble({ message }: { message: Message }) {
         />
       )}
 
-      {message.trace && message.trace.length > 0 && (
-        <ToolChips trace={message.trace} />
-      )}
+      {hasTrace && <ToolChips trace={message.trace!} />}
 
-      {(hasText || !hasThinking) && (
-        <div className="group relative px-4 py-3 rounded-[18px] rounded-tl-[6px] border border-line-2 bg-white/[0.04]">
-          {hasText ? (
-            <MarkdownMessage>{message.text}</MarkdownMessage>
-          ) : (
-            <StreamingPlaceholder />
-          )}
-          {message.streaming && hasText && (
+      {hasText && (
+        <div className="text-silver-1 leading-[1.6]">
+          <MarkdownMessage>{message.text}</MarkdownMessage>
+          {message.streaming && (
             <span
               className="inline-block w-[7px] h-[14px] align-[-2px] ml-0.5 bg-silver-2 animate-blink"
               aria-hidden
             />
           )}
-          {hasText && !message.streaming && (
-            <CopyMessageButton text={message.text} />
+          {!message.streaming && (
+            <div className="mt-2">
+              <CopyMessageButton text={message.text} />
+            </div>
           )}
         </div>
       )}
